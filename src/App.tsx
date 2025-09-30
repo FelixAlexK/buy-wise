@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div className="flex flex-col min-h-screen ">
-      <main className="  mx-auto p-8">
+      <main className="   p-8">
         <Outlet />
       </main>
       
