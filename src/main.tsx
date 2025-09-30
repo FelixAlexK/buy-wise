@@ -6,7 +6,6 @@ import Home from './pages/home.page.tsx'
 
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import Nav from './components/mobile-nav.component.tsx'
 import PurchasePage from './pages/purchase.page.tsx'
 
 const router = createBrowserRouter([
@@ -33,7 +32,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     
-      <RouterProvider router={router} />
+      <RouterProvider  router={router} />
     
   </StrictMode>,
 )
