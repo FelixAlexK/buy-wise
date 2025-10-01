@@ -1,3 +1,4 @@
+[![code style](https://antfu.me/badge-code-style.svg)](https://github.com/antfu/eslint-config)
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
