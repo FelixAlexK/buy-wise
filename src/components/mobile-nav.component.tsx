@@ -1,7 +1,7 @@
 import { Banknote, Home, Settings } from 'lucide-react'
 import { NavLink } from 'react-router'
 
-export default function Nav() {
+export default function MobileNavbar() {
   return (
     <nav className="flex flex-row justify-between text-black items-center border-t  text-center">
 
@@ -16,7 +16,7 @@ export default function Nav() {
         <Home />
       </NavLink>
       <NavLink
-        to="/purchase"
+        to="/"
         className={({ isActive }) =>
           [
             'p-4 w-full flex items-center justify-center',
