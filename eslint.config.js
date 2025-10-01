@@ -1,23 +1,19 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
+// eslint.config.mjs
+import antfu from '@antfu/eslint-config'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-    ],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-    },
+export default antfu({
+  react: true,
+  typescript: true,
+  jsx: true,
+  basePath: __dirname,
+  formatters: true,
+  jsonc: true,
+  ignores:
+    ['dist/*', 'node_modules/*', 'public/*'],
+
+  rules: {
+    'react/no-comment-textnodes': 'off',
+    'react-hooks-extra/no-unnecessary-use-prefix': 'off',
+    'react-hooks-extra/prefer-use-state-lazy-initialization': 'off',
   },
-])
+})
