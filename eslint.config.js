@@ -16,6 +16,7 @@ export default antfu({
     'react/no-comment-textnodes': 'off',
     'react-hooks-extra/no-unnecessary-use-prefix': 'off',
     'react-hooks-extra/prefer-use-state-lazy-initialization': 'off',
-    "unused-imports/no-unused-vars": 'warn'
+    "unused-imports/no-unused-vars": 'warn',
+    'node/prefer-global/process': 'off',
   },
 })
