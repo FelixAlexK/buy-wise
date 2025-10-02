@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
     "target": "ESNext",
-    "module": "Preserve",
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
+    "lib": ["ESNext"],
     "moduleDetection": "force",
+    "module": "Preserve",
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "noEmit": true,
     "paths": {
       "@/*": ["./src/*"]
     },
+    "allowImportingTsExtensions": true,
     "strict": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "noEmit": true,
+    "verbatimModuleSyntax": true
   }
 }

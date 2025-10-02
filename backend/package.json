@@ -4,6 +4,8 @@
     "dev": "bun run --hot index.ts",
     "build": "bun build index.ts --outdir dist",
     "type-check": "tsc --noEmit",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "db:push": "bunx drizzle-kit push",
     "auth:generate": "bunx @better-auth/cli generate --output ./src/db/schemas/auth.ts --config ./src/lib/auth.ts"
   },
