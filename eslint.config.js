@@ -10,10 +10,11 @@ export default antfu({
   jsonc: true,
   ignores:
     ['dist/*', 'node_modules/*', 'public/*'],
+  
 
   rules: {
     'react/no-comment-textnodes': 'off',
-    'react-hooks-extra/no-unnecessary-use-prefix': 'warn',
-    'react-hooks-extra/prefer-use-state-lazy-initialization': 'warn',
+    'react-hooks-extra/no-unnecessary-use-prefix': 'off',
+    'react-hooks-extra/prefer-use-state-lazy-initialization': 'off',
   },
 })
