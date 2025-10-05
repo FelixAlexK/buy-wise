@@ -1,9 +1,23 @@
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import db from '../db/index' // your drizzle instance
+import { betterAuth, type BetterAuthOptions } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import db from "../db";
+import * as schema from "../db/schemas/auth";
 
-export const auth = betterAuth({
+export const auth = betterAuth<BetterAuthOptions>({
   database: drizzleAdapter(db, {
-    provider: 'sqlite',
+    provider: "sqlite",
+
+    schema: schema,
   }),
-})
+  trustedOrigins: [process.env.CORS_ORIGIN!],
+  emailAndPassword: {
+    enabled: true,
+  },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+    },
+  },
+});
