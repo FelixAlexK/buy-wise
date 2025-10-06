@@ -2,7 +2,7 @@ import { index, integer, numeric, sqliteTable, text } from 'drizzle-orm/sqlite-c
 import { user } from './auth'
 
 export const stat = sqliteTable('stat', {
-  id: text('id').primaryKey(),
+  id: integer('id').primaryKey({ autoIncrement: true }),
   moneySaved: numeric('money_saved', { mode: 'number' }).notNull().default(0),
   workTimeSaved: numeric('work_time_saved', { mode: 'number' }).notNull().default(0),
   userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
