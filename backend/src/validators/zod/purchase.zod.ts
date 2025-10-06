@@ -5,22 +5,22 @@
 import { z } from "zod";
 
 export const InsertpurchaseSchema = z.object({
-  timeAtWork: z.unknown().optional(),
   userId: z.string(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+  value: z.number(),
 });
 
 export const UpdatepurchaseSchema = z.object({
-  timeAtWork: z.unknown().optional(),
+  timeAtWork: z.number().optional(),
   userId: z.string().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
 });
 
 export const SelectpurchaseSchema = z.object({
-  id: z.string(),
-  timeAtWork: z.unknown(),
+  id: z.number(),
+  timeAtWork: z.number(),
   userId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
