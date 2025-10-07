@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "target": "ESNext",
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
@@ -13,7 +14,6 @@
     "allowImportingTsExtensions": true,
     "strict": true,
     "noEmit": true,
-    "verbatimModuleSyntax": true,
-    "composite": true
+    "verbatimModuleSyntax": true
   }
 }

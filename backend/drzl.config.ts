@@ -1,5 +1,5 @@
 // drzl.config.ts
-import { defineConfig } from '@drzl/cli/config';
+import { defineConfig } from '@drzl/cli/config'
 
 export default defineConfig({
   schema: 'src/db/schemas/index.ts',
@@ -8,13 +8,17 @@ export default defineConfig({
     { kind: 'zod', path: 'src/validators/zod' },
     { kind: 'service', path: 'src/services', dataAccess: 'drizzle', fileSuffix: '.service' },
     {
-      kind: 'orpc', template: '@drzl/template-orpc-service', dataAccess: 'drizzle', includeRelations: true, validation: {
+      kind: 'orpc',
+      template: '@drzl/template-orpc-service',
+      dataAccess: 'drizzle',
+      includeRelations: true,
+      validation: {
         useShared: true,
         library: 'zod',
         importPath: '@/validators/zod',
-        schemaSuffix: 'Schema'
+        schemaSuffix: 'Schema',
       },
-      naming: { routerSuffix: 'Router', procedureCase: 'camel' }
+      naming: { routerSuffix: 'Router', procedureCase: 'camel' },
     },
   ],
-});
+})
