@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import z from 'zod'
 import { authClient } from '../lib/auth-client'
+import InputComponent from '../components/input.component'
 
 export default function SignInForm({
   onSwitchToSignUp,
@@ -62,15 +63,7 @@ export default function SignInForm({
           <form.Field name="email">
             {field => (
               <div className="space-y-2">
-                <label htmlFor={field.name}>Email</label>
-                <input
-                  id={field.name}
-                  name={field.name}
-                  type="email"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={e => field.handleChange(e.target.value)}
-                />
+                <InputComponent type='email' onBlur={field.handleBlur} value={field.state.value} onChange={e => field.handleChange(e.target.value)} name={field.name} required label="Email" placeholder="Email" />
                 {field.state.meta.errors.map(error => (
                   <p key={error?.message} className="text-red-500">
                     {error?.message}
@@ -85,15 +78,8 @@ export default function SignInForm({
           <form.Field name="password">
             {field => (
               <div className="space-y-2">
-                <label htmlFor={field.name}>Password</label>
-                <input
-                  id={field.name}
-                  name={field.name}
-                  type="password"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={e => field.handleChange(e.target.value)}
-                />
+                
+                <InputComponent type='password' onBlur={field.handleBlur} value={field.state.value} onChange={e => field.handleChange(e.target.value)} name={field.name} required label="Password" placeholder="Password" />
                 {field.state.meta.errors.map(error => (
                   <p key={error?.message} className="text-red-500">
                     {error?.message}
@@ -108,7 +94,7 @@ export default function SignInForm({
           {state => (
             <button
               type="submit"
-              className="w-full"
+              className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full"
               disabled={!state.canSubmit || state.isSubmitting}
             >
               {state.isSubmitting ? 'Submitting...' : 'Sign In'}
