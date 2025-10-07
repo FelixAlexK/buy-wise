@@ -2,7 +2,7 @@
 // Generated output is granted to you under your project's license.
 // You may use, copy, modify, and distribute without attribution.
 
-import { z } from "zod";
+import { z } from 'zod'
 
 export const InsertsessionSchema = z.object({
   expiresAt: z.coerce.date(),
@@ -12,7 +12,7 @@ export const InsertsessionSchema = z.object({
   ipAddress: z.string().nullable().optional(),
   userAgent: z.string().nullable().optional(),
   userId: z.string(),
-});
+})
 
 export const UpdatesessionSchema = z.object({
   expiresAt: z.coerce.date().optional(),
@@ -22,7 +22,7 @@ export const UpdatesessionSchema = z.object({
   ipAddress: z.string().nullable().optional(),
   userAgent: z.string().nullable().optional(),
   userId: z.string().optional(),
-});
+})
 
 export const SelectsessionSchema = z.object({
   id: z.string(),
@@ -33,8 +33,8 @@ export const SelectsessionSchema = z.object({
   ipAddress: z.string().nullable(),
   userAgent: z.string().nullable(),
   userId: z.string(),
-});
+})
 
-export type InsertsessionInput = z.input<typeof InsertsessionSchema>;
-export type UpdatesessionInput = z.input<typeof UpdatesessionSchema>;
-export type SelectsessionOutput = z.output<typeof SelectsessionSchema>;
+export type InsertsessionInput = z.input<typeof InsertsessionSchema>
+export type UpdatesessionInput = z.input<typeof UpdatesessionSchema>
+export type SelectsessionOutput = z.output<typeof SelectsessionSchema>

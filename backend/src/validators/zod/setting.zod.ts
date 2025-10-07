@@ -2,30 +2,30 @@
 // Generated output is granted to you under your project's license.
 // You may use, copy, modify, and distribute without attribution.
 
-import { z } from "zod";
+import { z } from 'zod'
 
 export const InsertsettingSchema = z.object({
-  salary: z.unknown().optional(),
-  workingTime: z.unknown().optional(),
+  salary: z.number().optional(),
+  workingTime: z.number().optional(),
   userId: z.string(),
-  updatedAt: z.coerce.date(),
-});
+  updatedAt: z.coerce.date().optional(),
+})
 
 export const UpdatesettingSchema = z.object({
-  salary: z.unknown().optional(),
-  workingTime: z.unknown().optional(),
+  salary: z.number().optional(),
+  workingTime: z.number().optional(),
   userId: z.string().optional(),
   updatedAt: z.coerce.date().optional(),
-});
+})
 
 export const SelectsettingSchema = z.object({
   id: z.string(),
-  salary: z.unknown(),
-  workingTime: z.unknown(),
+  salary: z.number(),
+  workingTime: z.number(),
   userId: z.string(),
   updatedAt: z.date(),
-});
+})
 
-export type InsertsettingInput = z.input<typeof InsertsettingSchema>;
-export type UpdatesettingInput = z.input<typeof UpdatesettingSchema>;
-export type SelectsettingOutput = z.output<typeof SelectsettingSchema>;
+export type InsertsettingInput = z.input<typeof InsertsettingSchema>
+export type UpdatesettingInput = z.input<typeof UpdatesettingSchema>
+export type SelectsettingOutput = z.output<typeof SelectsettingSchema>

@@ -2,33 +2,33 @@
 // Generated output is granted to you under your project's license.
 // You may use, copy, modify, and distribute without attribution.
 
-import { z } from "zod";
+import { z } from 'zod'
 
 export const InsertstatSchema = z.object({
-  moneySaved: z.unknown().optional(),
-  workTimeSaved: z.unknown().optional(),
+  moneySaved: z.number().optional(),
+  workTimeSaved: z.number().optional(),
   userId: z.string(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-});
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+})
 
 export const UpdatestatSchema = z.object({
-  moneySaved: z.unknown().optional(),
-  workTimeSaved: z.unknown().optional(),
+  moneySaved: z.number().optional(),
+  workTimeSaved: z.number().optional(),
   userId: z.string().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-});
+})
 
 export const SelectstatSchema = z.object({
   id: z.string(),
-  moneySaved: z.unknown(),
-  workTimeSaved: z.unknown(),
+  moneySaved: z.number(),
+  workTimeSaved: z.number(),
   userId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
-});
+})
 
-export type InsertstatInput = z.input<typeof InsertstatSchema>;
-export type UpdatestatInput = z.input<typeof UpdatestatSchema>;
-export type SelectstatOutput = z.output<typeof SelectstatSchema>;
+export type InsertstatInput = z.input<typeof InsertstatSchema>
+export type UpdatestatInput = z.input<typeof UpdatestatSchema>
+export type SelectstatOutput = z.output<typeof SelectstatSchema>

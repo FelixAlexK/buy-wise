@@ -2,7 +2,7 @@
 // Generated output is granted to you under your project's license.
 // You may use, copy, modify, and distribute without attribution.
 
-import { z } from "zod";
+import { z } from 'zod'
 
 export const InsertverificationSchema = z.object({
   identifier: z.string(),
@@ -10,7 +10,7 @@ export const InsertverificationSchema = z.object({
   expiresAt: z.coerce.date(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-});
+})
 
 export const UpdateverificationSchema = z.object({
   identifier: z.string().optional(),
@@ -18,7 +18,7 @@ export const UpdateverificationSchema = z.object({
   expiresAt: z.coerce.date().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-});
+})
 
 export const SelectverificationSchema = z.object({
   id: z.string(),
@@ -27,10 +27,10 @@ export const SelectverificationSchema = z.object({
   expiresAt: z.date(),
   createdAt: z.date(),
   updatedAt: z.date(),
-});
+})
 
-export type InsertverificationInput = z.input<typeof InsertverificationSchema>;
-export type UpdateverificationInput = z.input<typeof UpdateverificationSchema>;
+export type InsertverificationInput = z.input<typeof InsertverificationSchema>
+export type UpdateverificationInput = z.input<typeof UpdateverificationSchema>
 export type SelectverificationOutput = z.output<
   typeof SelectverificationSchema
->;
+>

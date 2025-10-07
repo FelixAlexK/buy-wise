@@ -2,7 +2,7 @@
 // Generated output is granted to you under your project's license.
 // You may use, copy, modify, and distribute without attribution.
 
-import { z } from "zod";
+import { z } from 'zod'
 
 export const InsertaccountSchema = z.object({
   accountId: z.string(),
@@ -17,7 +17,7 @@ export const InsertaccountSchema = z.object({
   password: z.string().nullable().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-});
+})
 
 export const UpdateaccountSchema = z.object({
   accountId: z.string().optional(),
@@ -32,7 +32,7 @@ export const UpdateaccountSchema = z.object({
   password: z.string().nullable().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-});
+})
 
 export const SelectaccountSchema = z.object({
   id: z.string(),
@@ -48,8 +48,8 @@ export const SelectaccountSchema = z.object({
   password: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
-});
+})
 
-export type InsertaccountInput = z.input<typeof InsertaccountSchema>;
-export type UpdateaccountInput = z.input<typeof UpdateaccountSchema>;
-export type SelectaccountOutput = z.output<typeof SelectaccountSchema>;
+export type InsertaccountInput = z.input<typeof InsertaccountSchema>
+export type UpdateaccountInput = z.input<typeof UpdateaccountSchema>
+export type SelectaccountOutput = z.output<typeof SelectaccountSchema>

@@ -2,21 +2,21 @@
 // Generated output is granted to you under your project's license.
 // You may use, copy, modify, and distribute without attribution.
 
-import { z } from "zod";
+import { z } from 'zod'
 
 export const InsertpurchaseSchema = z.object({
   userId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   value: z.number(),
-});
+})
 
 export const UpdatepurchaseSchema = z.object({
   timeAtWork: z.number().optional(),
   userId: z.string().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-});
+})
 
 export const SelectpurchaseSchema = z.object({
   id: z.number(),
@@ -24,8 +24,8 @@ export const SelectpurchaseSchema = z.object({
   userId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
-});
+})
 
-export type InsertpurchaseInput = z.input<typeof InsertpurchaseSchema>;
-export type UpdatepurchaseInput = z.input<typeof UpdatepurchaseSchema>;
-export type SelectpurchaseOutput = z.output<typeof SelectpurchaseSchema>;
+export type InsertpurchaseInput = z.input<typeof InsertpurchaseSchema>
+export type UpdatepurchaseInput = z.input<typeof UpdatepurchaseSchema>
+export type SelectpurchaseOutput = z.output<typeof SelectpurchaseSchema>

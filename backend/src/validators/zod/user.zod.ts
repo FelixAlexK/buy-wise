@@ -2,7 +2,7 @@
 // Generated output is granted to you under your project's license.
 // You may use, copy, modify, and distribute without attribution.
 
-import { z } from "zod";
+import { z } from 'zod'
 
 export const InsertuserSchema = z.object({
   name: z.string(),
@@ -11,7 +11,7 @@ export const InsertuserSchema = z.object({
   image: z.string().nullable().optional(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-});
+})
 
 export const UpdateuserSchema = z.object({
   name: z.string().optional(),
@@ -20,7 +20,7 @@ export const UpdateuserSchema = z.object({
   image: z.string().nullable().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-});
+})
 
 export const SelectuserSchema = z.object({
   id: z.string(),
@@ -30,8 +30,8 @@ export const SelectuserSchema = z.object({
   image: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
-});
+})
 
-export type InsertuserInput = z.input<typeof InsertuserSchema>;
-export type UpdateuserInput = z.input<typeof UpdateuserSchema>;
-export type SelectuserOutput = z.output<typeof SelectuserSchema>;
+export type InsertuserInput = z.input<typeof InsertuserSchema>
+export type UpdateuserInput = z.input<typeof UpdateuserSchema>
+export type SelectuserOutput = z.output<typeof SelectuserSchema>

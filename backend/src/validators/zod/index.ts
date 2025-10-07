@@ -2,10 +2,10 @@
 // Generated output is granted to you under your project's license.
 // You may use, copy, modify, and distribute without attribution.
 
-export * from "./account.zod";
-export * from "./purchase.zod";
-export * from "./session.zod";
-export * from "./setting.zod";
-export * from "./stat.zod";
-export * from "./user.zod";
-export * from "./verification.zod";
+export * from './account.zod'
+export * from './purchase.zod'
+export * from './session.zod'
+export * from './setting.zod'
+export * from './stat.zod'
+export * from './user.zod'
+export * from './verification.zod'
