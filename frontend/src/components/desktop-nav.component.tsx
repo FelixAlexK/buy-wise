@@ -1,11 +1,9 @@
 import { Banknote, Home, Settings } from 'lucide-react'
 import { NavLink } from 'react-router'
-import { authClient } from '../lib/auth-client';
+import { authClient } from '../lib/auth-client'
 
 export function DesktopNavbar({ content }: { content: React.ReactNode }) {
-
-  const { data } = authClient.useSession();
-
+  const { data } = authClient.useSession()
 
   return (
     <>
@@ -57,18 +55,20 @@ export function DesktopNavbar({ content }: { content: React.ReactNode }) {
             <Settings />
           </NavLink>
         </div>
-            <div className=" ">
-            {data ? (
-              <div className="mt-4 text-center">
-              <span className="text-sm">Signed in as</span>
-              <p className="font-medium">{data.user?.email}</p>
-              </div>
-            ) : (
-              <div className="mt-4 text-center">
-              <span className="text-sm">Not signed in</span>
-              </div>
-            )}
-            </div>
+        <div className=" ">
+          {data
+            ? (
+                <div className="mt-4 text-center">
+                  <span className="text-sm">Signed in as</span>
+                  <p className="font-medium">{data.user?.email}</p>
+                </div>
+              )
+            : (
+                <div className="mt-4 text-center">
+                  <span className="text-sm">Not signed in</span>
+                </div>
+              )}
+        </div>
 
       </nav>
       <div className="lg:ml-64">
