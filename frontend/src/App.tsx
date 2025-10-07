@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { Outlet } from 'react-router'
 import { DesktopNavbar } from './components/desktop-nav.component'
 import MobileNavbar from './components/mobile-nav.component'
-import Modal from './components/modal.component'
-import Settings from './pages/settings.page'
 
 function App() {
   const [showModal, setShowModal] = useState(() => {
@@ -31,9 +29,7 @@ function App() {
         <h1 className="text-3xl font-bold text-center p-4 border-b">BuyWise</h1>
       </header>
       <main className="p-8">
-        <Modal isOpen={showModal} onClose={() => close()}>
-          <Settings />
-        </Modal>
+
         <DesktopNavbar content={<Outlet />}></DesktopNavbar>
       </main>
 
