@@ -106,16 +106,16 @@ export default function Settings() {
               e.preventDefault()
               handleSubmit()
             }}
-            className="space-y-4 "
+            className="space-y-4 mt-8"
           >
 
-            <InputComponent value={formData.monthlySalary} onChange={handleChange} name="monthlySalary" required label="Monatliches Gehalt" placeholder="50€" />
-            <InputComponent value={formData.weeklyHours} onChange={handleChange} name="weeklyHours" required label="Wöchentliches Arbeitsstunden" placeholder="40 hours/week" />
+            <InputComponent value={formData.monthlySalary + '€'} onChange={handleChange} name="monthlySalary" required label="Monatliches Gehalt" placeholder="50€" />
+            <InputComponent value={formData.weeklyHours + ' hours/week'} onChange={handleChange} name="weeklyHours" required label="Wöchentliches Arbeitsstunden" placeholder="40 hours/week" />
             <button className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full" type="submit">Save</button>
           </form>
         </Card>
         <Card title="Reset Statistics" value="">
-          <div>
+          <div className='mt-4'>
             <span>⚠️ This action will reset your money and work time saved statistics. This cannot be undone.</span>
           </div>
           ️
@@ -124,7 +124,7 @@ export default function Settings() {
 
         </Card>
         <Card title="Delete Account" value="">
-          <div>
+          <div className='mt-4'>
             <span>⚠️ This action will permanently delete your account. This cannot be undone.</span>
           </div>
           ️
