@@ -5,6 +5,7 @@ import Modal from '../components/modal.component'
 import { authClient } from '../lib/auth-client'
 import { timeAtWork } from '../utils/calculations'
 import { orpc } from '../utils/orpc'
+import Card from '../components/card.component'
 
 export default function PurchasePage() {
   const [newPurchase, setNewPurchase] = useState(0)
@@ -21,7 +22,7 @@ export default function PurchasePage() {
   const purchaseCreateMutation = useMutation(orpc.purchase.create.mutationOptions({
     onSuccess: () => {
       handleStat()
-      settingGetQuery.refetch()
+      statGetQuery.refetch()
       setNewPurchase(0)
     },
   }))
@@ -29,6 +30,7 @@ export default function PurchasePage() {
   const settingCreateMutation = useMutation(orpc.setting.create.mutationOptions({
     onSuccess: () => {
       settingGetQuery.refetch()
+      
     },
 
   }))
@@ -106,7 +108,8 @@ export default function PurchasePage() {
 
   return (
     <>
-      <Modal onClose={() => close()} isOpen={showModal}>
+      <div className='w-full max-w-md mx-auto'>
+        <Modal onClose={() => close()} isOpen={showModal}>
         <form
           onSubmit={async (e) => {
             e.preventDefault()
@@ -126,11 +129,16 @@ export default function PurchasePage() {
           <button className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full" type="submit">Save</button>
         </form>
       </Modal>
-      <form onSubmit={handlePurchase} className="flex flex-col mt-18 max-w-md mx-auto">
+      <Card>
+
+        <form onSubmit={handlePurchase} className="flex flex-col   max-w-md mx-auto">
         <label className="mx-auto mb-10 text-2xl font-bold" htmlFor="purchase-input">PURCHASE PRICE</label>
-        <input onChange={e => setNewPurchase(Number(e.target.value))} value={newPurchase} className="border px-8 py-2 mb-8 rounded-md text-center" id="purchase-input" type="text" placeholder="50$" />
+        <input onChange={e => setNewPurchase(Number(e.target.value))}  className="border px-8 py-2 mb-8 rounded-md text-center" id="purchase-input" type="text" placeholder="50$" />
         <button className="bg-black text-white px-8 py-2 rounded-md max-w-1/2 mx-auto" type="submit">Submit</button>
-      </form>
+        </form>
+      </Card>
+      </div>
+      
     </>
   )
 }
