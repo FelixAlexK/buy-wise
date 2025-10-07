@@ -3,45 +3,45 @@
 // You may use, copy, modify, and distribute without attribution.
 
 export interface Insertaccount {
-  accountId: string;
-  providerId: string;
-  userId: string;
-  accessToken?: string;
-  refreshToken?: string;
-  idToken?: string;
-  accessTokenExpiresAt?: Date;
-  refreshTokenExpiresAt?: Date;
-  scope?: string;
-  password?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  accountId: string
+  providerId: string
+  userId: string
+  accessToken?: string
+  refreshToken?: string
+  idToken?: string
+  accessTokenExpiresAt?: Date
+  refreshTokenExpiresAt?: Date
+  scope?: string
+  password?: string
+  createdAt: Date
+  updatedAt: Date
 }
 export interface Updateaccount {
-  accountId?: string;
-  providerId?: string;
-  userId?: string;
-  accessToken?: string;
-  refreshToken?: string;
-  idToken?: string;
-  accessTokenExpiresAt?: Date;
-  refreshTokenExpiresAt?: Date;
-  scope?: string;
-  password?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  accountId?: string
+  providerId?: string
+  userId?: string
+  accessToken?: string
+  refreshToken?: string
+  idToken?: string
+  accessTokenExpiresAt?: Date
+  refreshTokenExpiresAt?: Date
+  scope?: string
+  password?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 export interface Selectaccount {
-  id: string;
-  accountId: string;
-  providerId: string;
-  userId: string;
-  accessToken?: string;
-  refreshToken?: string;
-  idToken?: string;
-  accessTokenExpiresAt?: Date;
-  refreshTokenExpiresAt?: Date;
-  scope?: string;
-  password?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  accountId: string
+  providerId: string
+  userId: string
+  accessToken?: string
+  refreshToken?: string
+  idToken?: string
+  accessTokenExpiresAt?: Date
+  refreshTokenExpiresAt?: Date
+  scope?: string
+  password?: string
+  createdAt: Date
+  updatedAt: Date
 }

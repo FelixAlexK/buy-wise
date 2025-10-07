@@ -3,27 +3,27 @@
 // You may use, copy, modify, and distribute without attribution.
 
 export interface Insertuser {
-  name: string;
-  email: string;
-  emailVerified?: boolean;
-  image?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string
+  createdAt: Date
+  updatedAt: Date
 }
 export interface Updateuser {
-  name?: string;
-  email?: string;
-  emailVerified?: boolean;
-  image?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  name?: string
+  email?: string
+  emailVerified?: boolean
+  image?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 export interface Selectuser {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string
+  createdAt: Date
+  updatedAt: Date
 }

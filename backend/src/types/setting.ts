@@ -3,21 +3,21 @@
 // You may use, copy, modify, and distribute without attribution.
 
 export interface Insertsetting {
-  salary?: unknown;
-  workingTime?: unknown;
-  userId: string;
-  updatedAt: Date;
+  salary?: unknown
+  workingTime?: unknown
+  userId: string
+  updatedAt: Date
 }
 export interface Updatesetting {
-  salary?: unknown;
-  workingTime?: unknown;
-  userId?: string;
-  updatedAt?: Date;
+  salary?: unknown
+  workingTime?: unknown
+  userId?: string
+  updatedAt?: Date
 }
 export interface Selectsetting {
-  id: string;
-  salary: unknown;
-  workingTime: unknown;
-  userId: string;
-  updatedAt: Date;
+  id: string
+  salary: unknown
+  workingTime: unknown
+  userId: string
+  updatedAt: Date
 }

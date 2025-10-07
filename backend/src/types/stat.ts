@@ -3,24 +3,24 @@
 // You may use, copy, modify, and distribute without attribution.
 
 export interface Insertstat {
-  moneySaved?: unknown;
-  workTimeSaved?: unknown;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  moneySaved?: unknown
+  workTimeSaved?: unknown
+  userId: string
+  createdAt: Date
+  updatedAt: Date
 }
 export interface Updatestat {
-  moneySaved?: unknown;
-  workTimeSaved?: unknown;
-  userId?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  moneySaved?: unknown
+  workTimeSaved?: unknown
+  userId?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 export interface Selectstat {
-  id: string;
-  moneySaved: unknown;
-  workTimeSaved: unknown;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  moneySaved: unknown
+  workTimeSaved: unknown
+  userId: string
+  createdAt: Date
+  updatedAt: Date
 }

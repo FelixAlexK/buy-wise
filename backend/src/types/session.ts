@@ -3,30 +3,30 @@
 // You may use, copy, modify, and distribute without attribution.
 
 export interface Insertsession {
-  expiresAt: Date;
-  token: string;
-  createdAt: Date;
-  updatedAt: Date;
-  ipAddress?: string;
-  userAgent?: string;
-  userId: string;
+  expiresAt: Date
+  token: string
+  createdAt: Date
+  updatedAt: Date
+  ipAddress?: string
+  userAgent?: string
+  userId: string
 }
 export interface Updatesession {
-  expiresAt?: Date;
-  token?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  ipAddress?: string;
-  userAgent?: string;
-  userId?: string;
+  expiresAt?: Date
+  token?: string
+  createdAt?: Date
+  updatedAt?: Date
+  ipAddress?: string
+  userAgent?: string
+  userId?: string
 }
 export interface Selectsession {
-  id: string;
-  expiresAt: Date;
-  token: string;
-  createdAt: Date;
-  updatedAt: Date;
-  ipAddress?: string;
-  userAgent?: string;
-  userId: string;
+  id: string
+  expiresAt: Date
+  token: string
+  createdAt: Date
+  updatedAt: Date
+  ipAddress?: string
+  userAgent?: string
+  userId: string
 }

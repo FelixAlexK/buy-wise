@@ -3,21 +3,21 @@
 // You may use, copy, modify, and distribute without attribution.
 
 export interface Insertpurchase {
-  timeAtWork?: unknown;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  timeAtWork?: unknown
+  userId: string
+  createdAt: Date
+  updatedAt: Date
 }
 export interface Updatepurchase {
-  timeAtWork?: unknown;
-  userId?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  timeAtWork?: unknown
+  userId?: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 export interface Selectpurchase {
-  id: string;
-  timeAtWork: unknown;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  timeAtWork: unknown
+  userId: string
+  createdAt: Date
+  updatedAt: Date
 }

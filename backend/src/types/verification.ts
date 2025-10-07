@@ -3,24 +3,24 @@
 // You may use, copy, modify, and distribute without attribution.
 
 export interface Insertverification {
-  identifier: string;
-  value: string;
-  expiresAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  identifier: string
+  value: string
+  expiresAt: Date
+  createdAt: Date
+  updatedAt: Date
 }
 export interface Updateverification {
-  identifier?: string;
-  value?: string;
-  expiresAt?: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
+  identifier?: string
+  value?: string
+  expiresAt?: Date
+  createdAt?: Date
+  updatedAt?: Date
 }
 export interface Selectverification {
-  id: string;
-  identifier: string;
-  value: string;
-  expiresAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  identifier: string
+  value: string
+  expiresAt: Date
+  createdAt: Date
+  updatedAt: Date
 }
