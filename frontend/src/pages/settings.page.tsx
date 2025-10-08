@@ -1,86 +1,150 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import Card from '../components/card.component'
 import InputComponent from '../components/input.component'
 import { authClient } from '../lib/auth-client'
 import { orpc } from '../utils/orpc'
 
-export default function Settings() {
-  const { data } = authClient.useSession()
+interface FormData {
+  monthlySalary: string
+  weeklyHours: string
+}
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
+interface SettingData {
+  salary?: number
+  workingTime?: number
+}
+
+export default function Settings() {
+  const { data: session } = authClient.useSession()
+  const userId = session?.user?.id ?? ''
+
+  const [formData, setFormData] = useState<FormData>({
     monthlySalary: '',
     weeklyHours: '',
   })
 
-  const settingGetQuery = useQuery(orpc.setting.getByUserId.queryOptions({ input: { userId: data?.user.id! }, enabled: !!data?.user?.id }))
-  useEffect(() => {
-    if (settingGetQuery.data) {
-      setFormData({
-        monthlySalary: settingGetQuery.data?.salary?.toString() || '--',
-        weeklyHours: settingGetQuery.data?.workingTime?.toString() || '--',
-      })
-    }
-  }, [settingGetQuery.data])
+  // Queries and Mutations
+  const settingQuery = useQuery(
+    orpc.setting.getByUserId.queryOptions({
+      input: { userId },
+      enabled: !!userId,
+    }),
+  )
 
-  const settingCreateMutation = useMutation(orpc.setting.create.mutationOptions({
-    onSuccess: () => {
-      settingGetQuery.refetch()
-    },
+  const settingCreateMutation = useMutation(
+    orpc.setting.create.mutationOptions({
+      onSuccess: () => {
+        toast.success('Settings have been created.')
+        settingQuery.refetch()
+      },
+      onError: () => {
+        toast.error('Failed to create settings. Please try again.')
+      },
+    }),
+  )
 
-  }))
+  const settingUpdateMutation = useMutation(
+    orpc.setting.update.mutationOptions({
+      onSuccess: () => {
+        toast.info('Settings have been updated.')
+        settingQuery.refetch()
+      },
+      onError: () => {
+        toast.error('Failed to update settings. Please try again.')
+      },
+    }),
+  )
 
-  const settingUpdateMutation = useMutation(orpc.setting.update.mutationOptions({
-    onSuccess: () => {
-      settingGetQuery.refetch()
-    },
-  }))
+  const statResetMutation = useMutation(
+    orpc.stat.reset.mutationOptions({
+      onSuccess: () => {
+        toast.info('Statistics have been reset.')
+      },
+      onError: () => {
+        toast.error('Failed to reset statistics. Please try again.')
+      },
+    }),
+  )
 
-  const statResetMutation = useMutation(orpc.stat.reset.mutationOptions({
-    onSuccess: () => {
-      // Optionally refetch any queries related to stats here
-    },
-  }))
+  // Helper functions
+  const formatSalary = (salary?: number): string =>
+    salary ? `${salary}€` : ''
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
+  const formatWorkingTime = (workingTime?: number): string =>
+    workingTime ? `${workingTime} hours/week` : ''
 
-    if (!data?.user) {
-      setIsSubmitting(false)
-      return
-    }
+  const parseSalary = (value: string): number =>
+    Number(value.replace('€', '').trim())
 
-    if (settingGetQuery.data) {
-      await settingUpdateMutation.mutateAsync({
-        workingTime: Number(formData.weeklyHours),
-        salary: Number(formData.monthlySalary),
-        userId: data?.user.id,
-      })
-    }
-    else {
-      await settingCreateMutation.mutateAsync({
-        workingTime: Number(formData.weeklyHours),
-        salary: Number(formData.monthlySalary),
-        userId: data?.user.id,
-      })
-    }
-    setIsSubmitting(false)
+  const parseWorkingTime = (value: string): number =>
+    Number(value.replace('hours/week', '').trim())
+
+  const hasDataChanged = (currentData: SettingData): boolean => {
+    const currentSalary = parseSalary(formData.monthlySalary)
+    const currentWorkingTime = parseWorkingTime(formData.weeklyHours)
+
+    return currentData.salary !== currentSalary
+      || currentData.workingTime !== currentWorkingTime
   }
 
+  // Effects
+  useEffect(() => {
+    if (settingQuery.data) {
+      setFormData({
+        monthlySalary: formatSalary(settingQuery.data.salary),
+        weeklyHours: formatWorkingTime(settingQuery.data.workingTime),
+      })
+    }
+  }, [settingQuery.data])
+
+  // Event handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleResetStats = async () => {
-    if (!data?.user) {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!userId)
       return
-    }
+
+    const settingData = settingQuery.data
+    if (settingData && !hasDataChanged(settingData))
+      return
+
+    const salary = parseSalary(formData.monthlySalary)
+    const workingTime = parseWorkingTime(formData.weeklyHours)
 
     try {
-      await statResetMutation.mutateAsync({ userId: data?.user.id })
-      // Optionally, you can show a success message or refetch related queries here
+      if (settingData) {
+        await settingUpdateMutation.mutateAsync({
+          workingTime,
+          salary,
+          userId,
+        })
+      }
+      else {
+        await settingCreateMutation.mutateAsync({
+          workingTime,
+          salary,
+          userId,
+        })
+      }
+    }
+    catch (error) {
+      console.error('Error saving settings:', error)
+    }
+  }
+
+  const handleResetStats = async () => {
+    if (!userId)
+      return
+
+    try {
+      await statResetMutation.mutateAsync({ userId })
     }
     catch (error) {
       console.error('Error resetting stats:', error)
@@ -90,51 +154,82 @@ export default function Settings() {
   const handleDeleteAccount = async () => {
     try {
       await authClient.deleteUser()
-      // Optionally, you can show a success message or redirect the user here
+      toast.info('Account deleted successfully.')
     }
     catch (error) {
+      toast.error('Failed to delete account. Please try again.')
       console.error('Error deleting account:', error)
     }
   }
 
+  const isLoading = settingCreateMutation.isPending
+    || settingUpdateMutation.isPending
+    || statResetMutation.isPending
+
   return (
-    <>
-      <div className="space-y-8 w-full max-w-md mx-auto mt-18">
-        <Card title="Income & Work Hours" value="">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              handleSubmit()
-            }}
-            className="space-y-4 mt-8"
+    <div className="space-y-8 w-full max-w-md mx-auto mt-18">
+      {/* Income & Work Hours Section */}
+      <Card title="Income & Work Hours" value="">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-8">
+          <InputComponent
+            value={formData.monthlySalary}
+            onChange={handleChange}
+            name="monthlySalary"
+            required
+            label="Monatliches Gehalt"
+            placeholder="50€"
+          />
+          <InputComponent
+            value={formData.weeklyHours}
+            onChange={handleChange}
+            name="weeklyHours"
+            required
+            label="Wöchentliches Arbeitsstunden"
+            placeholder="40 hours/week"
+          />
+          <button
+            className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full disabled:opacity-50"
+            type="submit"
+            disabled={isLoading}
           >
+            {isLoading ? 'Saving...' : 'Save'}
+          </button>
+        </form>
+      </Card>
 
-            <InputComponent value={formData.monthlySalary + '€'} onChange={handleChange} name="monthlySalary" required label="Monatliches Gehalt" placeholder="50€" />
-            <InputComponent value={formData.weeklyHours + ' hours/week'} onChange={handleChange} name="weeklyHours" required label="Wöchentliches Arbeitsstunden" placeholder="40 hours/week" />
-            <button className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full" type="submit">Save</button>
-          </form>
-        </Card>
-        <Card title="Reset Statistics" value="">
-          <div className='mt-4'>
-            <span>⚠️ This action will reset your money and work time saved statistics. This cannot be undone.</span>
-          </div>
-          ️
+      {/* Reset Statistics Section */}
+      <Card title="Reset Statistics" value="">
+        <div className="mt-4">
+          <span className="">
+            ⚠️ This action will reset your money and work time saved statistics. This cannot be undone.
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={handleResetStats}
+          className="bg-red-500 text-white mt-8 px-8 py-2 rounded-md mx-auto disabled:opacity-50"
+          disabled={isLoading}
+        >
+          {statResetMutation.isPending ? 'Resetting...' : 'Reset Statistics'}
+        </button>
+      </Card>
 
-          <button onClick={handleResetStats} className="bg-red-500 text-white mt-8 px-8 py-2 rounded-md mx-auto ">Reset Statistics</button>
-
-        </Card>
-        <Card title="Delete Account" value="">
-          <div className='mt-4'>
-            <span>⚠️ This action will permanently delete your account. This cannot be undone.</span>
-          </div>
-          ️
-
-          <button onClick={handleDeleteAccount} className="bg-red-500 text-white mt-8 px-8 py-2 rounded-md mx-auto ">Delete Account</button>
-
-        </Card>
-      </div>
-
-    </>
-
+      {/* Delete Account Section */}
+      <Card title="Delete Account" value="">
+        <div className="mt-4">
+          <span className="">
+            ⚠️ This action will permanently delete your account. This cannot be undone.
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={handleDeleteAccount}
+          className="bg-red-500 text-white mt-8 px-8 py-2 rounded-md mx-auto disabled:opacity-50"
+          disabled={isLoading}
+        >
+          Delete Account
+        </button>
+      </Card>
+    </div>
   )
 }
