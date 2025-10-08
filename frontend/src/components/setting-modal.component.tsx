@@ -1,10 +1,10 @@
 import InputComponent from "./input.component"
 import Modal from "./modal.component"
 
-export default function SettingModal({ isOpen, onClose, formData, handleChange, handleSettingCreation }: { isOpen: boolean, onClose: () => void, formData: any, handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void, handleSettingCreation: () => Promise<void> }) {
+export default function SettingModal({ isOpen, onClose, formData, handleChange, handleSettingCreation, isLoading }: { isOpen: boolean, onClose: () => void, formData: any, handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void, handleSettingCreation: () => Promise<void>, isLoading: boolean }) {
     if (!isOpen) return null
     return (
-        <Modal isOpen={isOpen}>
+        <Modal isLoading={isLoading} isOpen={isOpen}>
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault()
