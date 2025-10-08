@@ -1,148 +1,280 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import InputComponent from '../components/input.component'
-import Modal from '../components/modal.component'
+import { toast } from 'sonner'
+import Card from '../components/card.component'
+import SettingModal from '../components/setting-modal.component'
+import WorthItModal from '../components/worthit-modal.component'
 import { authClient } from '../lib/auth-client'
 import { timeAtWork } from '../utils/calculations'
 import { orpc } from '../utils/orpc'
-import Card from '../components/card.component'
-import WorthItModal from '../components/worthit-modal.component'
-import SettingModal from '../components/setting-modal.component'
+
+// Types
+interface FormData {
+  monthlySalary: string
+  weeklyHours: string
+}
+
+interface StatData {
+  moneySaved: number
+  workTimeSaved: number
+}
 
 export default function PurchasePage() {
+  // State
   const [newPurchase, setNewPurchase] = useState(0)
   const [showSettingModal, setShowSettingModal] = useState(false)
   const [showPurchaseModal, setShowPurchaseModal] = useState(false)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     monthlySalary: '',
     weeklyHours: '',
   })
 
-  const { data } = authClient.useSession()
+  // Queries and Mutations
+  const { data: session } = authClient.useSession()
+  const userId = session?.user?.id ?? ''
 
-  const purchaseCreateMutation = useMutation(orpc.purchase.create.mutationOptions({
-    onSuccess: () => {
-      handleStat()
-      statGetQuery.refetch()
-      setNewPurchase(0)
-    },
-  }))
-
-  const statGetQuery = useQuery(
-    orpc.stat.getById.queryOptions({
-      input: { userId: data?.user?.id! },
-      enabled: !!data?.user?.id && purchaseCreateMutation.isSuccess,
+  const settingQuery = useQuery(
+    orpc.setting.getByUserId.queryOptions({
+      input: { userId },
+      enabled: !!userId,
     }),
   )
 
-  const settingGetQuery = useQuery(orpc.setting.getByUserId.queryOptions({ input: { userId: data?.user.id! }, enabled: !!data?.user?.id! }))
+  const statQuery = useQuery(
+    orpc.stat.getById.queryOptions({
+      input: { userId },
+      enabled: !!userId,
+    }),
+  )
 
+  const purchaseCreateMutation = useMutation(
+    orpc.purchase.create.mutationOptions({
 
-  const settingCreateMutation = useMutation(orpc.setting.create.mutationOptions({
-    onSuccess: () => {
-      settingGetQuery.refetch()
-      
-    },
+      onSuccess: () => {
+        toast.success('Purchase created successfully.')
+        // eslint-disable-next-line ts/no-use-before-define
+        resetPurchase()
+      },
 
-  }))
+      onError: () => {
+        toast.error('Failed to create purchase. Please try again.')
+      },
+    }),
+  )
 
-  const statCreateMutation = useMutation(orpc.stat.create.mutationOptions({
-    onSuccess: () => {
+  const settingCreateMutation = useMutation(
+    orpc.setting.create.mutationOptions({
+      onSuccess: () => {
+        toast.success('Settings created successfully.')
+        // eslint-disable-next-line ts/no-use-before-define
+        resetFormData()
+      },
+      onError: () => {
+        toast.error('Failed to create settings. Please try again.')
+      },
+    }),
 
-    },
-  }))
+  )
 
-  const statUpdateMutation = useMutation(orpc.stat.update.mutationOptions({
-    onSuccess: () => {
+  const statCreateMutation = useMutation(
+    orpc.stat.create.mutationOptions({
+      onSuccess: () => {
+        toast.success('Stats created successfully.')
+      },
+      onError: () => {
+        toast.error('Failed to create stats. Please try again.')
+      },
+    }),
+  )
 
-    },
-  }))
+  const statUpdateMutation = useMutation(
+    orpc.stat.update.mutationOptions({
+      onError: () => {
+        toast.error('Failed to update stats.')
+      },
+    }),
+  )
 
-  
+  // Helper functions
+  const resetPurchase = () => setNewPurchase(0)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const resetFormData = () => setFormData({ monthlySalary: '', weeklyHours: '' })
+
+  const closeModals = () => {
+    setShowSettingModal(false)
+    setShowPurchaseModal(false)
+  }
+
+  const calculateStatData = (): StatData => {
+    if (!settingQuery.data)
+      return { moneySaved: 0, workTimeSaved: 0 }
+
+    const tAW = timeAtWork(
+      settingQuery.data.salary,
+      settingQuery.data.workingTime,
+      newPurchase,
+    )
+
+    return {
+      moneySaved: statQuery.data
+        ? statQuery.data.moneySaved + newPurchase
+        : newPurchase,
+      workTimeSaved: statQuery.data
+        ? statQuery.data.workTimeSaved + tAW
+        : tAW,
+    }
+  }
+
+  // Event handlers
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleDontBuy = async () => {
-    if (!data?.user)
+  const handlePurchaseInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPurchase(Number(e.target.value))
+  }
+
+  const handleSettingCreation = async () => {
+    if (!userId)
       return
 
-    if (settingGetQuery.data === undefined) {
+    try {
+      await settingCreateMutation.mutateAsync({
+        userId,
+        salary: Number(formData.monthlySalary),
+        workingTime: Number(formData.weeklyHours),
+      })
+      resetFormData()
+      setShowSettingModal(false)
+    }
+    catch (error) {
+      console.error('Failed to create settings:', error)
+    }
+  }
+
+  const handleStatUpdate = async () => {
+    if (!userId || !settingQuery.data)
+      return
+
+    const statData = calculateStatData()
+
+    try {
+      if (statQuery.data) {
+        await statUpdateMutation.mutateAsync({
+          userId,
+          ...statData,
+        })
+      }
+      else {
+        await statCreateMutation.mutateAsync({
+          userId,
+          moneySaved: newPurchase,
+          workTimeSaved: timeAtWork(
+            settingQuery.data.salary,
+            settingQuery.data.workingTime,
+            newPurchase,
+          ),
+        })
+      }
+    }
+    catch (error) {
+      console.error('Failed to update stats:', error)
+    }
+  }
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (newPurchase <= 0) {
+      toast.error('Please enter a valid purchase amount.')
+      return
+    }
+
+    if (!settingQuery.data) {
       setShowSettingModal(true)
       return
     }
 
-      purchaseCreateMutation.mutate({
-        value: newPurchase,
-        userId: data.user.id,
-      })
-      setNewPurchase(0)
-    setShowPurchaseModal(false)
-
-    
+    setShowPurchaseModal(true)
   }
 
   const handleBuy = () => {
-    setNewPurchase(0)
+    resetPurchase()
     setShowPurchaseModal(false)
   }
 
-  const handleStat = async () => {
-    if (!data?.user || !settingGetQuery.data)
+  const handleDontBuy = async () => {
+    if (!userId)
       return
 
-    const tAW = timeAtWork(settingGetQuery.data.salary, settingGetQuery.data.workingTime, newPurchase)
-
-    const statData = {
-      moneySaved: statGetQuery.data ? (statGetQuery.data.moneySaved + newPurchase) : newPurchase,
-      workTimeSaved: statGetQuery.data ? (statGetQuery.data.workTimeSaved + tAW) : tAW,
-    }
-
-    if (statGetQuery.isSuccess) {
-      statUpdateMutation.mutate({
-        userId: data.user.id,
-        ...statData,
+    try {
+      const purchase = await purchaseCreateMutation.mutateAsync({
+        value: newPurchase,
+        userId,
       })
-    }
-    else {
-      statCreateMutation.mutate({
-        userId: data.user.id,
-        moneySaved: newPurchase,
-        workTimeSaved: tAW,
-      })
-    }
-  }
 
-  const handleSettingCreation = async () => {
-    if (!data?.user)
-      return
+      if (purchase) {
+        await handleStatUpdate()
+      }
 
-    await settingCreateMutation.mutateAsync({
-      userId: data.user.id,
-      salary: Number(formData.monthlySalary),
-      workingTime: Number(formData.weeklyHours),
-    })
-    setFormData({ monthlySalary: '', weeklyHours: '' })
-    setShowSettingModal(false)
+      resetPurchase()
+      setShowPurchaseModal(false)
+    }
+    catch (error) {
+      console.error('Failed to create purchase:', error)
+    }
   }
 
   return (
-    <>
-      <div className='w-full max-w-md mx-auto'>
-        <SettingModal isOpen={showSettingModal} onClose={() => setShowSettingModal(false)} formData={formData} handleChange={handleChange} handleSettingCreation={async () => { await handleSettingCreation()}} />
-        <WorthItModal isOpen={showPurchaseModal} salary={settingGetQuery.data?.salary!} workingTime={settingGetQuery.data?.workingTime!} value={newPurchase} handleDontBuy={handleDontBuy} handleBuy={handleBuy} />
-      <Card>
+    <div className="w-full max-w-md mx-auto">
+      <SettingModal
+        isLoading={settingCreateMutation.isPending}
+        isOpen={showSettingModal}
+        onClose={() => setShowSettingModal(false)}
+        formData={formData}
+        handleChange={handleInputChange}
+        handleSettingCreation={handleSettingCreation}
+      />
 
-          <form onSubmit={(e) => { e.preventDefault(); setShowPurchaseModal(true); }} className="flex flex-col   max-w-md mx-auto">
-        <label className="mx-auto mb-10 text-2xl font-bold" htmlFor="purchase-input">PURCHASE PRICE</label>
-        <input onChange={e => setNewPurchase(Number(e.target.value))} value={newPurchase}  className="border px-8 py-2 mb-8 rounded-md text-center" id="purchase-input" type="text" placeholder="50$" />
-        <button className="bg-black text-white px-8 py-2 rounded-md max-w-1/2 mx-auto" type="submit">Submit</button>
+      <WorthItModal
+        isLoading={purchaseCreateMutation.isPending}
+        isOpen={showPurchaseModal}
+        salary={settingQuery.data?.salary ?? 0}
+        workingTime={settingQuery.data?.workingTime ?? 0}
+        value={newPurchase}
+        handleDontBuy={handleDontBuy}
+        handleBuy={handleBuy}
+      />
+
+      <Card>
+        <form onSubmit={handleFormSubmit} className="flex flex-col max-w-md mx-auto">
+          <label
+            className="mx-auto mb-10 text-2xl font-bold"
+            htmlFor="purchase-input"
+          >
+            PURCHASE PRICE
+          </label>
+
+          <input
+            id="purchase-input"
+            type="number"
+            placeholder="50€"
+            value={newPurchase === 0 ? '' : newPurchase}
+            onChange={handlePurchaseInputChange}
+            className="border px-8 py-2 mb-8 rounded-md text-center"
+            min="0"
+            step="0.1"
+          />
+
+          <button
+            type="submit"
+            className="bg-black text-white px-8 py-2 rounded-md max-w-1/2 mx-auto hover:bg-gray-800 transition-colors"
+          >
+            Submit
+          </button>
         </form>
       </Card>
-      </div>
-      
-    </>
+    </div>
   )
 }
