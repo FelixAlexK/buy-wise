@@ -1,4 +1,4 @@
-export default function Modal({ isOpen, onClose, children }: { isOpen: boolean, onClose: () => void, children: React.ReactNode }) {
+export default function Modal({ isOpen, children }: { isOpen: boolean, children: React.ReactNode }) {
   if (!isOpen)
     return null
   return (
