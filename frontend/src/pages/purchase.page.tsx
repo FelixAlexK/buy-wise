@@ -6,18 +6,19 @@ import { authClient } from '../lib/auth-client'
 import { timeAtWork } from '../utils/calculations'
 import { orpc } from '../utils/orpc'
 import Card from '../components/card.component'
+import WorthItModal from '../components/worthit-modal.component'
+import SettingModal from '../components/setting-modal.component'
 
 export default function PurchasePage() {
   const [newPurchase, setNewPurchase] = useState(0)
-  const [showModal, setShowModal] = useState(false)
+  const [showSettingModal, setShowSettingModal] = useState(false)
+  const [showPurchaseModal, setShowPurchaseModal] = useState(false)
   const [formData, setFormData] = useState({
     monthlySalary: '',
     weeklyHours: '',
   })
 
   const { data } = authClient.useSession()
-
-  const settingGetQuery = useQuery(orpc.setting.getByUserId.queryOptions({ input: { userId: data?.user.id! }, enabled: !!data?.user?.id! }))
 
   const purchaseCreateMutation = useMutation(orpc.purchase.create.mutationOptions({
     onSuccess: () => {
@@ -26,6 +27,16 @@ export default function PurchasePage() {
       setNewPurchase(0)
     },
   }))
+
+  const statGetQuery = useQuery(
+    orpc.stat.getById.queryOptions({
+      input: { userId: data?.user?.id! },
+      enabled: !!data?.user?.id && purchaseCreateMutation.isSuccess,
+    }),
+  )
+
+  const settingGetQuery = useQuery(orpc.setting.getByUserId.queryOptions({ input: { userId: data?.user.id! }, enabled: !!data?.user?.id! }))
+
 
   const settingCreateMutation = useMutation(orpc.setting.create.mutationOptions({
     onSuccess: () => {
@@ -47,37 +58,35 @@ export default function PurchasePage() {
     },
   }))
 
-  const statGetQuery = useQuery(
-    orpc.stat.getById.queryOptions({
-      input: { userId: data?.user?.id! },
-      enabled: !!data?.user?.id && purchaseCreateMutation.isSuccess,
-    }),
-  )
-
-  const close = () => {
-    setShowModal(false)
-    localStorage.setItem('showModal', '1')
-  }
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handlePurchase = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleDontBuy = async () => {
     if (!data?.user)
       return
 
     if (settingGetQuery.data === undefined) {
-      setShowModal(true)
+      setShowSettingModal(true)
       return
     }
 
-    purchaseCreateMutation.mutate({
-      value: newPurchase,
-      userId: data.user.id,
-    })
+      purchaseCreateMutation.mutate({
+        value: newPurchase,
+        userId: data.user.id,
+      })
+      setNewPurchase(0)
+    setShowPurchaseModal(false)
+
+    
+  }
+
+  const handleBuy = () => {
+    setNewPurchase(0)
+    setShowPurchaseModal(false)
   }
 
   const handleStat = async () => {
@@ -106,34 +115,29 @@ export default function PurchasePage() {
     }
   }
 
+  const handleSettingCreation = async () => {
+    if (!data?.user)
+      return
+
+    await settingCreateMutation.mutateAsync({
+      userId: data.user.id,
+      salary: Number(formData.monthlySalary),
+      workingTime: Number(formData.weeklyHours),
+    })
+    setFormData({ monthlySalary: '', weeklyHours: '' })
+    setShowSettingModal(false)
+  }
+
   return (
     <>
       <div className='w-full max-w-md mx-auto'>
-        <Modal onClose={() => close()} isOpen={showModal}>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault()
-
-            await settingCreateMutation.mutateAsync({
-              workingTime: Number(formData.weeklyHours),
-              salary: Number(formData.monthlySalary),
-              userId: data?.user.id!,
-            })
-            setShowModal(false)
-          }}
-          className="space-y-4 "
-        >
-
-          <InputComponent value={formData.monthlySalary} onChange={handleChange} name="monthlySalary" required label="Monatliches Gehalt" placeholder="50€" />
-          <InputComponent value={formData.weeklyHours} onChange={handleChange} name="weeklyHours" required label="Wöchentliches Arbeitsstunden" placeholder="40 hours/week" />
-          <button className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full" type="submit">Save</button>
-        </form>
-      </Modal>
+        <SettingModal isOpen={showSettingModal} onClose={() => setShowSettingModal(false)} formData={formData} handleChange={handleChange} handleSettingCreation={async () => { await handleSettingCreation()}} />
+        <WorthItModal isOpen={showPurchaseModal} salary={settingGetQuery.data?.salary!} workingTime={settingGetQuery.data?.workingTime!} value={newPurchase} handleDontBuy={handleDontBuy} handleBuy={handleBuy} />
       <Card>
 
-        <form onSubmit={handlePurchase} className="flex flex-col   max-w-md mx-auto">
+          <form onSubmit={(e) => { e.preventDefault(); setShowPurchaseModal(true); }} className="flex flex-col   max-w-md mx-auto">
         <label className="mx-auto mb-10 text-2xl font-bold" htmlFor="purchase-input">PURCHASE PRICE</label>
-        <input onChange={e => setNewPurchase(Number(e.target.value))}  className="border px-8 py-2 mb-8 rounded-md text-center" id="purchase-input" type="text" placeholder="50$" />
+        <input onChange={e => setNewPurchase(Number(e.target.value))} value={newPurchase}  className="border px-8 py-2 mb-8 rounded-md text-center" id="purchase-input" type="text" placeholder="50$" />
         <button className="bg-black text-white px-8 py-2 rounded-md max-w-1/2 mx-auto" type="submit">Submit</button>
         </form>
       </Card>
