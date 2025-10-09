@@ -2,23 +2,12 @@ import { Banknote, LogIn, Settings, Wallet } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router'
 import { authClient } from '@/lib/auth-client'
 import { NavUser } from './nav-user.component'
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from './ui/sidebar'
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from './ui/sidebar'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data } = authClient.useSession()
 
   const navigate = useNavigate()
-  const { state } = useSidebar()
-
-  const handleSignOut = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          navigate('/login')
-        },
-      },
-    })
-  }
 
   const handleLoginRedirect = async () => {
     navigate('/login')
