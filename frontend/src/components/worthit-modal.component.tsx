@@ -1,34 +1,35 @@
 import { timeAtWork } from '../utils/calculations'
 import Modal from './modal.component'
+import { Button } from './ui/button'
 
-export default function WorthItModal({ isOpen, salary, workingTime, value, handleDontBuy, handleBuy, isLoading }: { isOpen: boolean, salary: number, workingTime: number, value: number, handleDontBuy: () => void, handleBuy: () => void, isLoading: boolean }) {
+export default function WorthItModal({ isOpen, salary, workingTime, value, handleDontBuy, handleBuy, onClose }: { isOpen: boolean, salary: number, workingTime: number, value: number, handleDontBuy: () => void, handleBuy: () => void, onClose: () => void }) {
   if (!isOpen)
     return null
   return (
-    <Modal isLoading={isLoading} isOpen={isOpen}>
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-4">Worth it?</h2>
-        <p className="mb-4">Time at Work</p>
-        <p className="text-lg font-semibold">
+    <Modal onClose={onClose} title="Worth it?" description="Evaluate the worth of this purchase" isOpen={isOpen}>
+      <div className="flex flex-col">
+        <p className="text-lg text-gray-600 mb-2">Time at Work</p>
+        <p className="text-2xl font-semibold mb-8">
           {timeAtWork(salary, workingTime, value)}
           {' '}
           hours
         </p>
-        <div className="gap-4 flex justify-center">
-          <button
+        <div className="flex flex-row gap-4">
+          <Button
             type="button"
-            className="bg-black text-white mt-8 px-8 py-2 rounded-md"
+
             onClick={handleDontBuy}
           >
             Don't Buy
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            className="bg-black text-white mt-8 px-8 py-2 rounded-md"
+            variant="outline"
+
             onClick={handleBuy}
           >
             Buy
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>
