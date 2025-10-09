@@ -48,17 +48,19 @@ export function DesktopNavbar({ content }: { content: React.ReactNode }) {
             <span className="mr-2 text-lg ">Purchase</span>
             <Banknote />
           </NavLink>
-          <NavLink
-            to="/settings"
-            className={({ isActive }) =>
-              [
-                'p-4 w-full flex items-center justify-center rounded-r-md transition-colors duration-200',
-                isActive ? 'bg-black text-white font-semibold' : 'hover:bg-gray-200',
-              ].join(' ')}
-          >
-            <span className="mr-2 text-lg ">Settings</span>
-            <Settings />
-          </NavLink>
+          {data && (
+            <NavLink
+              to="/settings"
+              className={({ isActive }) =>
+                [
+                  'p-4 w-full flex items-center justify-center rounded-r-md transition-colors duration-200',
+                  isActive ? 'bg-black text-white font-semibold' : 'hover:bg-gray-200',
+                ].join(' ')}
+            >
+              <span className="mr-2 text-lg ">Settings</span>
+              <Settings />
+            </NavLink>
+          )}
         </div>
         <div className=" mt-auto pl-4">
           {data
