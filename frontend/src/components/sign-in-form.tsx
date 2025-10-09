@@ -16,6 +16,21 @@ export default function SignInForm({
   const navigate = useNavigate()
   const { isPending } = authClient.useSession()
 
+  const signInWithGoogle = async () => {
+    await authClient.signIn.social(
+      { provider: 'google' },
+      {
+        onSuccess: () => {
+          navigate('/home')
+          toast.success('Sign in successful')
+        },
+        onError: (error) => {
+          toast.error(error.error.message || error.error.statusText)
+        },
+      },
+    )
+  }
+
   const form = useForm({
     defaultValues: {
       email: '',
@@ -98,16 +113,32 @@ export default function SignInForm({
             </div>
             <form.Subscribe>
               {state => (
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={!state.canSubmit || state.isSubmitting}
-                >
-                  {state.isSubmitting ? <Spinner /> : 'Sign In'}
-                </Button>
+                <>
+                  {' '}
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={!state.canSubmit || state.isSubmitting}
+                  >
+                    {state.isSubmitting ? <Spinner /> : 'Sign In'}
+                  </Button>
+                  <Button
+                    type="button"
+                    className="w-full"
+                    variant="outline"
+                    onClick={signInWithGoogle}
+                    disabled={!state.canSubmit || state.isSubmitting}
+                  >
+                    {state.isSubmitting ? <Spinner /> : 'Google'}
+                  </Button>
+                  {' '}
+
+                </>
+
               )}
             </form.Subscribe>
           </form>
+
           <div className="mt-4 text-center">
             <Button
               type="button"
