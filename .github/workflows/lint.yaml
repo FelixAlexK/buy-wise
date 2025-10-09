@@ -1,0 +1,25 @@
+name: Lint
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest # or specific version
+      - name: Use bun
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - run: bun i
+      - run: bun lint
