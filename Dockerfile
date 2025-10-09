@@ -1,41 +1,42 @@
 # syntax = docker/dockerfile:1
 
-# Use Bun's official image
-FROM oven/bun:1.2.0-slim as base
+# Adjust BUN_VERSION as desired
+ARG BUN_VERSION=1.1.42
+FROM oven/bun:${BUN_VERSION}-slim AS base
 
 LABEL fly_launch_runtime="Bun"
 
-# Set working directory
+# Bun app lives here
 WORKDIR /app
 
 # Set production environment
-ENV NODE_ENV=production
+ENV NODE_ENV="production"
+
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
-# Install packages needed to build (if any native dependencies)
+# Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install -y python3 pkg-config build-essential && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install --no-install-recommends -y build-essential pkg-config python-is-python3
 
-# Copy package files
-COPY --link package.json bun.lockb* ./
-COPY --link frontend/package.json ./frontend/
-COPY --link backend/package.json ./backend/
+# Install node modules
+COPY bun.lockb package.json ./
+RUN bun install --ci
 
-# Install all dependencies (including devDependencies for build)
-RUN bun install --frozen-lockfile
+# Install frontend node modules
+COPY --link frontend/bun.lockb frontend/package.json ./frontend/
+RUN cd frontend && bun install --ci
 
 # Copy application code
 COPY --link . .
 
-# Build application
+# Change to frontend directory and build the frontend app
+WORKDIR /app/frontend
 RUN bun run build
+# Remove all files in frontend except for the dist folder
+RUN find . -mindepth 1 ! -regex '^./dist\(/.*\)?' -delete
 
-# Remove development dependencies
-RUN bun install --frozen-lockfile --production
 
 # Final stage for app image
 FROM base
@@ -43,6 +44,7 @@ FROM base
 # Copy built application
 COPY --from=build /app /app
 
+
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD ["bun", "run", "start"]
+CMD [ "bun", "run", "start" ]
