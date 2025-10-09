@@ -1,11 +1,7 @@
-
 import {
 
   ChevronsUpDown,
-  CreditCard,
-  LogIn,
   LogOut,
-  Sparkles,
 } from 'lucide-react'
 
 import { useNavigate } from 'react-router'
@@ -17,7 +13,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,

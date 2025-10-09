@@ -1,4 +1,4 @@
-import { Banknote, LogIn, LogOut, Settings, Wallet } from 'lucide-react'
+import { Banknote, LogIn, Settings, Wallet } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router'
 import { authClient } from '@/lib/auth-client'
 import { NavUser } from './nav-user.component'
