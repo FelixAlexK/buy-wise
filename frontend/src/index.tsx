@@ -14,7 +14,6 @@ createRoot(rootElement!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <Toaster toastOptions={{ style: { marginLeft: '8rem' } }} position="top-center" />
       <ReactQueryDevtools buttonPosition="bottom-right" />
     </QueryClientProvider>
   </StrictMode>,
