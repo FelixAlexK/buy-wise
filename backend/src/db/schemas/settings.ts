@@ -5,6 +5,7 @@ export const setting = sqliteTable('setting', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   salary: numeric({ mode: 'number' }).notNull().default(0),
   workingTime: numeric('working_time', { mode: 'number' }).notNull().default(0),
+  dailyHours: numeric('daily_hours', { mode: 'number' }).notNull().default(8),
   userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
   updatedAt: integer('updated_at', { mode: 'timestamp_ms' })
     .$defaultFn(() => new Date())
@@ -13,4 +14,5 @@ export const setting = sqliteTable('setting', {
 }, table => [
   index('working_time_idx').on(table.workingTime),
   index('salary_idx').on(table.salary),
+  index('daily_hours_idx').on(table.dailyHours),
 ])
