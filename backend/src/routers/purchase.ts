@@ -27,6 +27,12 @@ export const purchaseRouter = {
   delete: protectedProcedure
     .input(z.object({ id: z.number() }))
     .handler(async ({ input }) => {
-      return await db.delete(purchase).where(eq(purchase.id, input.id))
+      return await db.delete(purchase).where(eq(purchase.id, input.id)).returning()
+    }),
+
+  deleteByUserId: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .handler(async ({ input }) => {
+      return await db.delete(purchase).where(eq(purchase.userId, input.userId))
     }),
 }
