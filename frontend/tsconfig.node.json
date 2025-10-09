@@ -8,7 +8,7 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "types": [],
+    "types": ["bun", "node"],
     "allowImportingTsExtensions": true,
 
     /* Linting */

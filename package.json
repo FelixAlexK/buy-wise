@@ -13,6 +13,7 @@
     "type-check": "turbo type-check"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.23",
     "turbo": "^2.5.8"
   }
 }

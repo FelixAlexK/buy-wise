@@ -15,7 +15,7 @@
         "./src/*"
       ]
     },
-    "types": ["vite/client"],
+    "types": ["vite/client", "bun"],
     "allowImportingTsExtensions": true,
 
     /* Linting */
@@ -30,5 +30,5 @@
     "noUncheckedSideEffectImports": true
 
   },
-  "include": ["src"]
+  "include": ["env.d.ts", "src/**/*", "src/**/*.{ts,tsx}", "../backend/*", "locales"]
 }
