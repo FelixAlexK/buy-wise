@@ -54,7 +54,7 @@ export default function SignUpForm({
   }
 
   return (
-    <div className="space-y-8 w-full max-w-sm mx-auto mt-18">
+    <div className="space-y-8 w-full max-w-sm mx-auto">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
