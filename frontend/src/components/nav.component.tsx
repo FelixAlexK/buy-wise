@@ -1,0 +1,23 @@
+import { AppSidebar } from './app-sidebar.component'
+import { SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar'
+
+export function DesktopNavbar({ content }: { content: React.ReactNode }) {
+  return (
+    <>
+      <SidebarProvider defaultOpen={true}>
+        <AppSidebar collapsible="icon" variant="inset" />
+
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+          </header>
+          <main className="flex flex-1 flex-col gap-4 p-4">
+            {content}
+
+          </main>
+
+        </SidebarInset>
+      </SidebarProvider>
+    </>
+  )
+}
