@@ -6,8 +6,8 @@ import { protectedProcedure, publicProcedure } from '../lib/orpc'
 import { InsertpurchaseSchema } from '../validators/zod/purchase.zod'
 
 export const purchaseRouter = {
-  getAll: publicProcedure.handler(async () => {
-    return await db.query.purchase.findMany()
+  getAll: publicProcedure.input(z.object({ userId: z.string() })).handler(async ({ input }) => {
+    return await db.query.purchase.findMany({ where: eq(purchase.userId, input.userId), orderBy: (p, { desc }) => [desc(p.createdAt)] })
   }),
 
   create: protectedProcedure
