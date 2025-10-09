@@ -103,11 +103,6 @@ export default function PurchasePage() {
 
   const resetFormData = () => setFormData({ monthlySalary: '', weeklyHours: '' })
 
-  const closeModals = () => {
-    setShowSettingModal(false)
-    setShowPurchaseModal(false)
-  }
-
   const calculateStatData = (): StatData => {
     if (!settingQuery.data)
       return { moneySaved: 0, workTimeSaved: 0 }
@@ -232,7 +227,7 @@ export default function PurchasePage() {
   const isLoading = purchaseCreateMutation.isPending
 
   return (
-    <div className="w-full max-w-sm mx-auto grid gap-8 mt-18">
+    <div className="w-full max-w-sm mx-auto grid gap-8">
 
       <SettingModal
         isLoading={settingCreateMutation.isPending}
@@ -248,6 +243,7 @@ export default function PurchasePage() {
         isOpen={showPurchaseModal}
         salary={settingQuery.data?.salary ?? 0}
         workingTime={settingQuery.data?.workingTime ?? 0}
+        dailyWorkingHours={settingQuery.data?.dailyHours ?? 8}
         value={newPurchase}
         handleDontBuy={handleDontBuy}
         handleBuy={handleBuy}
