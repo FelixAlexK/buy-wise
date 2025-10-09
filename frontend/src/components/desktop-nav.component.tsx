@@ -1,22 +1,24 @@
 import { Banknote, Home, Settings } from 'lucide-react'
-import { Link, NavLink, redirect } from 'react-router'
+import { NavLink, useNavigate } from 'react-router'
 import { authClient } from '../lib/auth-client'
+import { Button } from './ui/button'
 
 export function DesktopNavbar({ content }: { content: React.ReactNode }) {
   const { data } = authClient.useSession()
+  const navigate = useNavigate()
 
   const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          redirect("/login");
-        }
-      }
+          navigate('/login')
+        },
+      },
     })
   }
 
-  const handleSignIn = async () => {
-    return redirect("/login");
+  const handleLoginRedirect = async () => {
+    navigate('/login')
   }
 
   return (
@@ -61,17 +63,19 @@ export function DesktopNavbar({ content }: { content: React.ReactNode }) {
         <div className=" mt-auto pl-4">
           {data
             ? (
-                <div className="mt-4 mx-auto text-center">
+                <div className="space-y-4 mx-auto text-center">
                   <span className="text-sm">Signed in as</span>
-                <p className="font-medium">{data.user?.email}</p>
-                <button className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full" type="button" onClick={handleSignOut}>Sign Out</button>
+                  <p className="font-medium">{data.user?.email}</p>
+                  <Button className="w-full" variant="default" type="button" onClick={handleSignOut}>Sign Out</Button>
                 </div>
-                
-            )
-            
-            : <div className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full text-center">
-              <Link  to="/login">Sign Up</Link>
-            </div>}
+
+              )
+
+            : (
+
+                <Button className="w-full" variant="default" type="button" onClick={handleLoginRedirect}>Sign Up</Button>
+
+              )}
         </div>
 
       </nav>
