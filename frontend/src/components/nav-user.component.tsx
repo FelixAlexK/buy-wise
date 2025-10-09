@@ -36,7 +36,6 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-  const { data } = authClient.useSession()
 
   const navigate = useNavigate()
 
@@ -48,10 +47,6 @@ export function NavUser({
         },
       },
     })
-  }
-
-  const handleLoginRedirect = async () => {
-    navigate('/login')
   }
 
   return (
