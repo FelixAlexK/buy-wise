@@ -1,20 +1,30 @@
 import { Loader } from 'lucide-react'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
-export default function Modal({ isOpen, children, isLoading }: { isOpen: boolean, children: React.ReactNode, isLoading: boolean }) {
+export default function Modal({ isOpen, children, title, description, onClose }: { isOpen: boolean, children: React.ReactNode, title?: string, description?: string, onClose: () => void }) {
   if (!isOpen)
     return null
 
   return (
-    <div className="fixed  inset-0 bg-black/90 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white lg:ml-64 p-6 rounded-lg shadow-lg w-11/12 max-w-md">
-        {isLoading
-          ? (
-              <Loader className="animate-spin text-center w-full" />
-            )
-          : (
-              children
-            )}
-      </div>
-    </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md lg:ml-24">
+        <DialogHeader>
+
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        {children}
+
+      </DialogContent>
+    </Dialog>
   )
 }
