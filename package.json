@@ -1,17 +1,17 @@
 {
-    "name": "buy-wise",
-    "private": true,
-    "version": "0.0.1",
-    "workspaces": ["backend", "frontend"],
-    "scripts": {
-        "dev": "turbo dev",
-        "build": "turbo build",
-        "lint": "turbo lint",
-        "lint:fix": "turbo lint:fix",
-        "type-check": "turbo type-check"
-    },
-    "devDependencies": {
-        "turbo": "^2.5.8"
-    },
-    "packageManager": "bun@1.2.0"
+  "name": "buy-wise",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": ["backend", "frontend"],
+  "packageManager": "bun@1.2.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "type-check": "turbo type-check"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.8"
+  }
 }
