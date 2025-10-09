@@ -1,6 +1,7 @@
 import { Banknote, LogIn, LogOut, Settings, Wallet } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router'
 import { authClient } from '@/lib/auth-client'
+import { NavUser } from './nav-user.component'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from './ui/sidebar'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -77,37 +78,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {data
+        {data && data.user
           ? (
-              <div className="space-y-4">
-                <div
-                  className={`
-                    transition-all duration-300 ease-in-out
-                    ${state === 'expanded' ? 'opacity-100 max-h-40 scale-100' : 'opacity-0 max-h-0 scale-95 pointer-events-none'}
-                    origin-left overflow-hidden
-                  `}
-                >
-                  <span className="text-sm transition-all">Signed in as</span>
-                  <p className="font-medium transition-all">{data.user?.email}</p>
-                </div>
-                <SidebarMenuButton onClick={handleSignOut}>
-                  <LogOut />
-                  <span>Sign Out</span>
-                </SidebarMenuButton>
-              </div>
-
+              <NavUser user={{ name: data?.user.name ?? '', email: data?.user.email ?? '', avatar: data?.user.image ?? '' }} />
             )
-
           : (
-
               <SidebarMenuButton onClick={handleLoginRedirect}>
-
                 <LogIn />
                 <span>Sign In</span>
               </SidebarMenuButton>
 
             )}
       </SidebarFooter>
+
     </Sidebar>
   )
 }
