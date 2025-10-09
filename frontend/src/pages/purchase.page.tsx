@@ -232,7 +232,7 @@ export default function PurchasePage() {
   const isLoading = purchaseCreateMutation.isPending
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-sm mx-auto grid gap-8 mt-18">
 
       <SettingModal
         isLoading={settingCreateMutation.isPending}
@@ -253,7 +253,7 @@ export default function PurchasePage() {
         handleBuy={handleBuy}
       />
 
-      <Card className="w-full max-w-sm">
+      <Card>
         <CardHeader className="">
           <CardTitle className="font-bold text-2xl text-center">PURCHASE PRICE</CardTitle>
         </CardHeader>
