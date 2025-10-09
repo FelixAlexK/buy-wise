@@ -1,7 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import Card from '../components/card.component'
+import InputComponent from '@/components/input.component'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Dialog } from '@/components/ui/dialog'
+import { Spinner } from '@/components/ui/spinner'
+import CardComponent from '../components/card.component'
 import SettingModal from '../components/setting-modal.component'
 import WorthItModal from '../components/worthit-modal.component'
 import { authClient } from '../lib/auth-client'
@@ -226,8 +231,11 @@ export default function PurchasePage() {
     }
   }
 
+  const isLoading = purchaseCreateMutation.isPending
+
   return (
     <div className="w-full max-w-md mx-auto">
+
       <SettingModal
         isLoading={settingCreateMutation.isPending}
         isOpen={showSettingModal}
@@ -238,7 +246,7 @@ export default function PurchasePage() {
       />
 
       <WorthItModal
-        isLoading={purchaseCreateMutation.isPending}
+        onClose={() => setShowPurchaseModal(false)}
         isOpen={showPurchaseModal}
         salary={settingQuery.data?.salary ?? 0}
         workingTime={settingQuery.data?.workingTime ?? 0}
@@ -247,33 +255,29 @@ export default function PurchasePage() {
         handleBuy={handleBuy}
       />
 
-      <Card>
-        <form onSubmit={handleFormSubmit} className="flex flex-col max-w-md mx-auto">
-          <label
-            className="mx-auto mb-10 text-2xl font-bold"
-            htmlFor="purchase-input"
-          >
-            PURCHASE PRICE
-          </label>
+      <Card className="w-full max-w-sm">
+        <CardHeader className="">
+          <CardTitle className="font-bold text-2xl text-center">PURCHASE PRICE</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleFormSubmit} className="flex flex-col">
+            <div className="flex flex-col gap-6">
+              <InputComponent min={0} step={0.1} name="PURCHASE PRICE" label="" value={newPurchase === 0 ? '' : newPurchase.toString()} required onChange={handlePurchaseInputChange} type="number" placeholder="50€">
+              </InputComponent>
 
-          <input
-            id="purchase-input"
-            type="number"
-            placeholder="50€"
-            value={newPurchase === 0 ? '' : newPurchase}
-            onChange={handlePurchaseInputChange}
-            className="border px-8 py-2 mb-8 rounded-md text-center"
-            min="0"
-            step="0.1"
-          />
+              <Button
+                type="submit"
+                variant="default"
+                className="w-1/2 mx-auto"
+                disabled={isLoading}
+              >
+                {isLoading ? <Spinner /> : 'Submit'}
+              </Button>
+            </div>
 
-          <button
-            type="submit"
-            className="bg-black text-white px-8 py-2 rounded-md max-w-1/2 mx-auto hover:bg-gray-800 transition-colors"
-          >
-            Submit
-          </button>
-        </form>
+          </form>
+        </CardContent>
+
       </Card>
     </div>
   )
