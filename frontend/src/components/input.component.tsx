@@ -6,7 +6,7 @@ export default function InputComponent({ label, placeholder, type = 'text', requ
   return (
     <div className="grid gap-2">
       {label && <Label htmlFor={name}>{label}</Label>}
-      <Input required={required} name={name} id={name} type={type} value={value} placeholder={placeholder} onChange={onChange} min={min} step={step} />
+      <Input required={required} name={name} id={name} onBlur={onBlur} type={type} value={value} placeholder={placeholder} onChange={onChange} min={min} step={step} />
     </div>
   )
 }

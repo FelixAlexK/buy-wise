@@ -7,11 +7,13 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "start": "turbo start",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "type-check": "turbo type-check"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.23",
     "turbo": "^2.5.8"
   }
 }

@@ -1,27 +1,7 @@
-import { } from 'lucide-react'
-import { useNavigate } from 'react-router'
-import { authClient } from '../lib/auth-client'
 import { AppSidebar } from './app-sidebar.component'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar'
 
-export function DesktopNavbar({ content }: { content: React.ReactNode }) {
-  const { data } = authClient.useSession()
-  const navigate = useNavigate()
-
-  const handleSignOut = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          navigate('/login')
-        },
-      },
-    })
-  }
-
-  const handleLoginRedirect = async () => {
-    navigate('/login')
-  }
-
+export function DesktopNavbar({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SidebarProvider defaultOpen={true}>
@@ -32,9 +12,10 @@ export function DesktopNavbar({ content }: { content: React.ReactNode }) {
             <SidebarTrigger className="-ml-1" />
           </header>
           <main className="flex flex-1 flex-col gap-4 p-4">
-            {content}
+            {children}
 
           </main>
+
         </SidebarInset>
       </SidebarProvider>
     </>
