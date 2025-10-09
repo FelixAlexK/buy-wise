@@ -30,11 +30,13 @@ import { orpc } from '../utils/orpc'
 interface FormData {
   monthlySalary: string
   weeklyHours: string
+  dailyHours: string
 }
 
 interface SettingData {
   salary?: number
   workingTime?: number
+  dailyHours?: number
 }
 
 export default function Settings() {
@@ -44,6 +46,7 @@ export default function Settings() {
   const [formData, setFormData] = useState<FormData>({
     monthlySalary: '',
     weeklyHours: '',
+    dailyHours: '',
   })
 
   // Queries and Mutations
@@ -89,6 +92,17 @@ export default function Settings() {
     }),
   )
 
+  const purchaseDeleteByUserIdMutation = useMutation(
+    orpc.purchase.deleteByUserId.mutationOptions({
+      onSuccess: () => {
+        toast.info('All purchases have been deleted.')
+      },
+      onError: () => {
+        toast.error('Failed to delete purchases. Please try again.')
+      },
+    }),
+  )
+
   // Helper functions
   const formatSalary = (salary?: number): string =>
     salary ? `${salary}€` : ''
@@ -96,18 +110,26 @@ export default function Settings() {
   const formatWorkingTime = (workingTime?: number): string =>
     workingTime ? `${workingTime} hours/week` : ''
 
+  const formatDailyHours = (dailyHours?: number): string =>
+    dailyHours ? `${dailyHours} hours/day` : ''
+
   const parseSalary = (value: string): number =>
     Number(value.replace('€', '').trim())
 
   const parseWorkingTime = (value: string): number =>
     Number(value.replace('hours/week', '').trim())
 
+  const parseDailyHours = (value: string): number =>
+    Number(value.replace('hours/day', '').trim())
+
   const hasDataChanged = (currentData: SettingData): boolean => {
     const currentSalary = parseSalary(formData.monthlySalary)
     const currentWorkingTime = parseWorkingTime(formData.weeklyHours)
+    const currentDailyHours = parseDailyHours(formData.dailyHours)
 
     return currentData.salary !== currentSalary
       || currentData.workingTime !== currentWorkingTime
+      || currentData.dailyHours !== currentDailyHours
   }
 
   // Effects
@@ -116,6 +138,7 @@ export default function Settings() {
       setFormData({
         monthlySalary: formatSalary(settingQuery.data.salary),
         weeklyHours: formatWorkingTime(settingQuery.data.workingTime),
+        dailyHours: formatDailyHours(settingQuery.data.dailyHours),
       })
     }
   }, [settingQuery.data])
@@ -138,12 +161,14 @@ export default function Settings() {
 
     const salary = parseSalary(formData.monthlySalary)
     const workingTime = parseWorkingTime(formData.weeklyHours)
+    const dailyHours = parseDailyHours(formData.dailyHours)
 
     try {
       if (settingData) {
         await settingUpdateMutation.mutateAsync({
           workingTime,
           salary,
+          dailyHours,
           userId,
         })
       }
@@ -151,6 +176,7 @@ export default function Settings() {
         await settingCreateMutation.mutateAsync({
           workingTime,
           salary,
+          dailyHours,
           userId,
         })
       }
@@ -160,15 +186,18 @@ export default function Settings() {
     }
   }
 
-  const handleResetStats = async () => {
+  const handleDeleteData = async () => {
     if (!userId)
       return
 
     try {
-      await statResetMutation.mutateAsync({ userId })
+      await Promise.all([
+        statResetMutation.mutateAsync({ userId }),
+        purchaseDeleteByUserIdMutation.mutateAsync({ userId }),
+      ])
     }
     catch (error) {
-      console.error('Error resetting stats:', error)
+      console.error('Error deleting data:', error)
     }
   }
 
@@ -186,7 +215,7 @@ export default function Settings() {
   const isLoadingSettings = settingCreateMutation.isPending || settingUpdateMutation.isPending
 
   return (
-    <div className="space-y-8 w-full max-w-sm mx-auto mt-18">
+    <div className="space-y-8 w-full max-w-sm mx-auto">
       {/* Income & Work Hours Section */}
       <Card>
         <CardHeader>
@@ -211,6 +240,13 @@ export default function Settings() {
                 label="Wöchentliches Arbeitsstunden"
                 placeholder="40 hours/week"
               />
+              <InputComponent
+                value={formData.dailyHours}
+                onChange={handleChange}
+                name="dailyHours"
+                label="Tägliche Arbeitsstunden"
+                placeholder="8 hours/day"
+              />
 
               <Button
 
@@ -231,8 +267,8 @@ export default function Settings() {
       {/* Reset Statistics Section */}
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Reset Statistics</CardTitle>
-          <CardDescription>⚠️ This action will reset your money and work time saved statistics. This cannot be undone.</CardDescription>
+          <CardTitle>Delete Data</CardTitle>
+          <CardDescription>⚠️ This action will permanently delete your data. This cannot be undone.</CardDescription>
         </CardHeader>
         <CardContent>
           <CardAction>
@@ -243,20 +279,20 @@ export default function Settings() {
                   variant="destructive"
                   disabled={statResetMutation.isPending}
                 >
-                  {statResetMutation.isPending ? 'Resetting...' : 'Reset Statistics'}
+                  {statResetMutation.isPending ? <Spinner /> : 'Delete Data'}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent className="lg:ml-24">
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Reset Statistics</AlertDialogTitle>
+                  <AlertDialogTitle>Delete Data</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Are you sure you want to reset your statistics? This action cannot be undone.
+                    Are you sure you want to delete your data? This action cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleResetStats} disabled={statResetMutation.isPending}>
-                    {statResetMutation.isPending ? 'Resetting...' : 'Reset Statistics'}
+                  <AlertDialogAction onClick={handleDeleteData} disabled={statResetMutation.isPending}>
+                    {statResetMutation.isPending || purchaseDeleteByUserIdMutation.isPending ? <Spinner /> : 'Delete Data'}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
