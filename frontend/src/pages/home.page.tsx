@@ -69,10 +69,10 @@ export default function Home() {
           <CardDescription>Most recent purchases are shown first</CardDescription>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-full max-h-80">
+          <ScrollArea className="h-72">
             <div>
               {purchases.isLoading
-                ? <Skeleton className="h-80 rounded-xl" />
+                ? <Skeleton className="h-72 rounded-xl" />
                 : purchases.data?.map(purchase => (
                     <React.Fragment key={purchase.id}>
                       <Item variant="outline" className="mb-4">
