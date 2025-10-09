@@ -7,6 +7,7 @@ import { z } from 'zod'
 export const InsertsettingSchema = z.object({
   salary: z.number().optional(),
   workingTime: z.number().optional(),
+  dailyHours: z.number().optional(),
   userId: z.string(),
   updatedAt: z.coerce.date().optional(),
 })
@@ -14,6 +15,7 @@ export const InsertsettingSchema = z.object({
 export const UpdatesettingSchema = z.object({
   salary: z.number().optional(),
   workingTime: z.number().optional(),
+  dailyHours: z.number().optional(),
   userId: z.string().optional(),
   updatedAt: z.coerce.date().optional(),
 })
@@ -22,6 +24,7 @@ export const SelectsettingSchema = z.object({
   id: z.string(),
   salary: z.number(),
   workingTime: z.number(),
+  dailyHours: z.number().optional(),
   userId: z.string(),
   updatedAt: z.date(),
 })
