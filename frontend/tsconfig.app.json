@@ -10,6 +10,11 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
     "types": ["vite/client"],
     "allowImportingTsExtensions": true,
 
@@ -23,6 +28,7 @@
     "erasableSyntaxOnly": true,
     "skipLibCheck": true,
     "noUncheckedSideEffectImports": true
+
   },
-  "include": ["frontend/src"]
+  "include": ["src"]
 }
