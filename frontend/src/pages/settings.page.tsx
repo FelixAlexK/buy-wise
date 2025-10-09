@@ -1,8 +1,29 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import Card from '../components/card.component'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import InputComponent from '../components/input.component'
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../components/ui/card'
 import { authClient } from '../lib/auth-client'
 import { orpc } from '../utils/orpc'
 
@@ -162,73 +183,128 @@ export default function Settings() {
     }
   }
 
-  const isLoading = settingCreateMutation.isPending
-    || settingUpdateMutation.isPending
-    || statResetMutation.isPending
+  const isLoadingSettings = settingCreateMutation.isPending || settingUpdateMutation.isPending
 
   return (
-    <div className="space-y-8 w-full max-w-md mx-auto mt-18">
+    <div className="space-y-8 w-full max-w-sm mx-auto mt-18">
       {/* Income & Work Hours Section */}
-      <Card title="Income & Work Hours" value="">
-        <form onSubmit={handleSubmit} className="space-y-4 mt-8">
-          <InputComponent
-            value={formData.monthlySalary}
-            onChange={handleChange}
-            name="monthlySalary"
-            required
-            label="Monatliches Gehalt"
-            placeholder="50€"
-          />
-          <InputComponent
-            value={formData.weeklyHours}
-            onChange={handleChange}
-            name="weeklyHours"
-            required
-            label="Wöchentliches Arbeitsstunden"
-            placeholder="40 hours/week"
-          />
-          <button
-            className="bg-black text-white mt-8 px-8 py-2 rounded-md w-full disabled:opacity-50"
-            type="submit"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Saving...' : 'Save'}
-          </button>
-        </form>
+      <Card>
+        <CardHeader>
+          <CardTitle>Income & Work Hours</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="">
+            <div className="flex flex-col gap-6">
+              <InputComponent
+                value={formData.monthlySalary}
+                onChange={handleChange}
+                name="monthlySalary"
+                required
+                label="Monatliches Gehalt"
+                placeholder="50€"
+              />
+              <InputComponent
+                value={formData.weeklyHours}
+                onChange={handleChange}
+                name="weeklyHours"
+                required
+                label="Wöchentliches Arbeitsstunden"
+                placeholder="40 hours/week"
+              />
+
+              <Button
+
+                type="submit"
+                variant="default"
+                disabled={isLoadingSettings}
+              >
+
+                {isLoadingSettings ? <Spinner /> : 'Save'}
+              </Button>
+            </div>
+
+          </form>
+        </CardContent>
+
       </Card>
 
       {/* Reset Statistics Section */}
-      <Card title="Reset Statistics" value="">
-        <div className="mt-4">
-          <span className="">
-            ⚠️ This action will reset your money and work time saved statistics. This cannot be undone.
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={handleResetStats}
-          className="bg-red-500 text-white mt-8 px-8 py-2 rounded-md mx-auto disabled:opacity-50"
-          disabled={isLoading}
-        >
-          {statResetMutation.isPending ? 'Resetting...' : 'Reset Statistics'}
-        </button>
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Reset Statistics</CardTitle>
+          <CardDescription>⚠️ This action will reset your money and work time saved statistics. This cannot be undone.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <CardAction>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  disabled={statResetMutation.isPending}
+                >
+                  {statResetMutation.isPending ? 'Resetting...' : 'Reset Statistics'}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="lg:ml-24">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Reset Statistics</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to reset your statistics? This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleResetStats} disabled={statResetMutation.isPending}>
+                    {statResetMutation.isPending ? 'Resetting...' : 'Reset Statistics'}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+          </CardAction>
+        </CardContent>
+
       </Card>
 
       {/* Delete Account Section */}
-      <Card title="Delete Account" value="">
-        <div className="mt-4">
-          <span className="">
-            ⚠️ This action will permanently delete your account. This cannot be undone.
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={handleDeleteAccount}
-          className="bg-red-500 text-white mt-8 px-8 py-2 rounded-md mx-auto disabled:opacity-50"
-          disabled={isLoading}
-        >
-          Delete Account
-        </button>
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Delete Account</CardTitle>
+          <CardDescription>⚠️ This action will permanently delete your account. This cannot be undone.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <CardAction>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Button
+                  type="button"
+
+                  variant="destructive"
+
+                  disabled={statResetMutation.isPending}
+                >
+                  Delete Account
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="lg:ml-24">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete Account</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete your account? This action cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteAccount} disabled={statResetMutation.isPending}>
+                    {statResetMutation.isPending ? 'Deleting...' : 'Delete Account'}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+          </CardAction>
+        </CardContent>
       </Card>
     </div>
   )
