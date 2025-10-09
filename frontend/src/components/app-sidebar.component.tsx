@@ -1,7 +1,6 @@
-import { Banknote, Home, LogIn, LogOut, Settings, Wallet } from 'lucide-react'
+import { Banknote, LogIn, LogOut, Settings, Wallet } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router'
 import { authClient } from '@/lib/auth-client'
-import { Button } from './ui/button'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from './ui/sidebar'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

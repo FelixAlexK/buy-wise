@@ -1,9 +1,8 @@
 import { } from 'lucide-react'
-import { NavLink, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { authClient } from '../lib/auth-client'
 import { AppSidebar } from './app-sidebar.component'
-import { Button } from './ui/button'
-import { SidebarContent, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger, useSidebar } from './ui/sidebar'
+import { SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar'
 
 export function DesktopNavbar({ content }: { content: React.ReactNode }) {
   const { data } = authClient.useSession()
