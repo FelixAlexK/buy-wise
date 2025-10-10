@@ -20,12 +20,16 @@ FROM base AS build
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential pkg-config python-is-python3
 
-# Install node modules
-COPY bun.lockb package.json ./
+# Install node modules (only copy package.json, not bun.lockb since it doesn't exist)
+COPY package.json ./
 RUN bun install --ci
 
-# Install frontend node modules
-COPY --link frontend/bun.lockb frontend/package.json ./frontend/
+# Install backend node modules
+COPY --link backend/package.json ./backend/
+RUN cd backend && bun install --ci
+
+# Install frontend node modules (only copy package.json, not bun.lockb since it doesn't exist)
+COPY --link frontend/package.json ./frontend/
 RUN cd frontend && bun install --ci
 
 # Copy application code
@@ -35,6 +39,11 @@ COPY --link . .
 WORKDIR /app/frontend
 RUN bun run build
 # Remove all files in frontend except for the dist folder
+WORKDIR /app
+RUN find frontend -mindepth 1 ! -regex '^frontend/dist\(/.*\)?' -delete
+
+# Change to backend directory and build the backend app
+WORKDIR /app/backend
 RUN find . -mindepth 1 ! -regex '^./dist\(/.*\)?' -delete
 
 
