@@ -1,6 +1,6 @@
 import type React from 'react'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
+import { Input } from './ui/input'
+import { Label } from './ui/label'
 
 export default function InputComponent({ label, placeholder, type = 'text', required = false, onChange, name, value, onBlur, min, step }: { label?: string, placeholder?: string, type?: React.HTMLInputTypeAttribute, required?: boolean, onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void, name: string, value?: string, onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void, min?: number, step?: number }) {
   return (

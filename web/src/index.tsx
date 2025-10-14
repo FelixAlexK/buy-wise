@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router/dom'
 import { router } from './routes.ts'
 
-import { queryClient } from './utils/orpc'
+import { queryClient } from './utils/orpc.ts'
 import './index.css'
 
 const ReactQueryDevtools = import.meta.env.DEV
