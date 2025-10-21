@@ -39,13 +39,14 @@ interface SettingData {
 }
 
 export default function Settings() {
+  const { data: session } = authClient.useSession()
+  const userId = session?.user?.id ?? ''
+
   const [formData, setFormData] = useState<FormData>({
     monthlySalary: '',
     weeklyHours: '',
     dailyHours: '',
   })
-  const { data: session } = authClient.useSession()
-  const userId = session?.user?.id ?? ''
 
   // Queries and Mutations
   const settingQuery = useQuery(
