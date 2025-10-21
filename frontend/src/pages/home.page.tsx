@@ -89,7 +89,7 @@ export default function Home() {
         </CardContent>
       </Card>
 
-      <Card className="h-full">
+      <Card>
         <CardHeader>
           <CardTitle>
             Last Purchases (
@@ -105,7 +105,7 @@ export default function Home() {
               Add your first purchase
             </Button>
           </div>
-          <ScrollArea className="h-72">
+          <ScrollArea className="h-auto max-h-72">
             <div>
               {purchases.isLoading
                 ? <Skeleton className="h-72 rounded-xl" />
