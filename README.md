@@ -124,6 +124,15 @@ buy-wise/
    ```
 5. Open a pull request.
 
+## Future Development
+
+We have ambitious plans for Buy Wise! Check out these documents:
+
+- **[IDEAS.md](IDEAS.md)** - Comprehensive list of development ideas organized by category
+- **[ROADMAP.md](ROADMAP.md)** - Phased implementation timeline with priorities
+
+Contributions and feedback on these ideas are welcome!
+
 ## License
 
 This project is licensed under the MIT License.
