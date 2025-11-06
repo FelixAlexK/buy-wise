@@ -130,6 +130,9 @@ We have ambitious plans for Buy Wise! Check out these documents:
 
 - **[IDEAS.md](IDEAS.md)** - Comprehensive list of development ideas organized by category
 - **[ROADMAP.md](ROADMAP.md)** - Phased implementation timeline with priorities
+- **[ISSUE_TEMPLATES_GUIDE.md](ISSUE_TEMPLATES_GUIDE.md)** - Ready-to-use issue templates for all 37 features
+
+Want to contribute? All ideas have been broken down into individual issue templates in [`.github/ISSUES/`](.github/ISSUES/) - pick one and start implementing!
 
 Contributions and feedback on these ideas are welcome!
 
