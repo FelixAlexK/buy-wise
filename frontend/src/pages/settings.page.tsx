@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import {
   AlertDialog,
@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
+import { formatDailyHours, formatSalary, formatWorkingTime } from '@/utils/formatter'
+import { parseDailyHours, parseSalary, parseWorkingTime } from '@/utils/parser'
 import InputComponent from '../components/input.component'
 import {
   Card,
@@ -48,11 +50,40 @@ export default function Settings() {
     dailyHours: '',
   })
 
+  const updateFormData = () => {
+    if (!settingQuery.data)
+      return
+
+    const data = settingQuery.data
+
+    setFormData((prev) => {
+      const newData = {
+        monthlySalary: data.salary ? formatSalary(data.salary) : '',
+        weeklyHours: data.workingTime ? formatWorkingTime(data.workingTime) : '',
+        dailyHours: data.dailyHours ? formatDailyHours(data.dailyHours) : '',
+      }
+
+      if (
+        prev.monthlySalary === newData.monthlySalary
+        && prev.weeklyHours === newData.weeklyHours
+        && prev.dailyHours === newData.dailyHours
+      ) {
+        return prev
+      }
+
+      return newData
+    })
+  }
+
   // Queries and Mutations
   const settingQuery = useQuery(
     orpc.setting.getByUserId.queryOptions({
       input: { userId },
       enabled: !!userId,
+      // Move the state sync out of a useEffect and into the query's onSuccess callback.
+      onSuccess: () => {
+        updateFormData()
+      },
     }),
   )
 
@@ -103,23 +134,6 @@ export default function Settings() {
   )
 
   // Helper functions
-  const formatSalary = (salary?: number): string =>
-    salary ? `${salary}€` : ''
-
-  const formatWorkingTime = (workingTime?: number): string =>
-    workingTime ? `${workingTime} hours/week` : ''
-
-  const formatDailyHours = (dailyHours?: number): string =>
-    dailyHours ? `${dailyHours} hours/day` : ''
-
-  const parseSalary = (value: string): number =>
-    Number(value.replace('€', '').trim())
-
-  const parseWorkingTime = (value: string): number =>
-    Number(value.replace('hours/week', '').trim())
-
-  const parseDailyHours = (value: string): number =>
-    Number(value.replace('hours/day', '').trim())
 
   const hasDataChanged = (currentData: SettingData): boolean => {
     const currentSalary = parseSalary(formData.monthlySalary)
@@ -130,17 +144,6 @@ export default function Settings() {
       || currentData.workingTime !== currentWorkingTime
       || currentData.dailyHours !== currentDailyHours
   }
-
-  // Effects
-  useEffect(() => {
-    if (settingQuery.data) {
-      setFormData({
-        monthlySalary: formatSalary(settingQuery.data.salary),
-        weeklyHours: formatWorkingTime(settingQuery.data.workingTime),
-        dailyHours: formatDailyHours(settingQuery.data.dailyHours),
-      })
-    }
-  }, [settingQuery.data])
 
   // Event handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
