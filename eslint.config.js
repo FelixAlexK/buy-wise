@@ -9,7 +9,7 @@ export default antfu({
   formatters: true,
   jsonc: true,
   ignores:
-    ['dist/*', 'node_modules/*', 'public/*'],
+    ['dist/*', 'node_modules/*', 'public/*', './frontend/src/components/ui/*'],
 
   rules: {
     'react/no-comment-textnodes': 'off',
@@ -17,5 +17,8 @@ export default antfu({
     'react-hooks-extra/prefer-use-state-lazy-initialization': 'off',
     'unused-imports/no-unused-vars': 'warn',
     'node/prefer-global/process': 'off',
+    'ts/no-use-before-define': 'warn'
   },
+
+  
 })
